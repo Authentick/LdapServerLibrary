@@ -1,0 +1,8 @@
+version: '3'
+services:
+  ldapserver:
+      image: mcr.microsoft.com/dotnet/sdk:5.0
+      volumes:
+        - .:/workspace:cached
+        - /var/run/docker.sock:/var/run/docker-host.sock
+      command: /bin/sh -c "while sleep 1000; do :; done"
