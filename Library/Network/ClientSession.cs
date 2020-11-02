@@ -38,9 +38,7 @@ namespace LdapServer.Network
                     Array.Copy(bytes, 0, cropped, 0, i);
 
                     PacketParser parser = new PacketParser();
-                                        System.Console.WriteLine("asdf");
                     var foo = parser.TryParsePacket(cropped);
-                    System.Console.WriteLine(foo);
 
                     // Translate data bytes to a ASCII string.
                     data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);

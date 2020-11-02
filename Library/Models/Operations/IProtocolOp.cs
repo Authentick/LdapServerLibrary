@@ -1,5 +1,5 @@
 namespace LdapServer.Models.Operations {
-    abstract internal class IProtocolOp {
-        abstract internal int GetTag();
+    internal interface IProtocolOp {
+        internal int GetTag();
     }
 }

@@ -9,7 +9,7 @@ namespace LdapServer.Models.Operations.Response
             LdapResult = ldapResult;
         }
 
-        internal override int GetTag()
+        int IProtocolOp.GetTag()
         {
             return 1;
         }

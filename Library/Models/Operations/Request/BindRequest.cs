@@ -18,7 +18,7 @@ namespace LdapServer.Models.Operations.Request
             Authentication = authentication;
         }
 
-        internal override int GetTag()
+        int IProtocolOp.GetTag()
         {
             return 0;
         }
