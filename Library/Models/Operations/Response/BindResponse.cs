@@ -1,3 +1,5 @@
+using System.Formats.Asn1;
+
 namespace LdapServer.Models.Operations.Response
 {
     internal class BindResponse : IProtocolOp

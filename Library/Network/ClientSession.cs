@@ -1,7 +1,9 @@
 using System;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using LdapServer.Engine;
 using LdapServer.Models;
+using LdapServer.Models.Operations.Request;
 using LdapServer.Models.Operations.Response;
 using LdapServer.Parser;
 
@@ -34,30 +36,20 @@ namespace LdapServer.Network
                 // Loop to receive all the data sent by the client.
                 while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
                 {
-                    Byte[] cropped = new Byte[i];
-                    Array.Copy(bytes, 0, cropped, 0, i);
-
                     PacketParser parser = new PacketParser();
-                    var foo = parser.TryParsePacket(cropped);
+                    LdapMessage message = parser.TryParsePacket(bytes);
 
-                    // Translate data bytes to a ASCII string.
-                    data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                    Console.WriteLine("Received: {0}", data);
-
-
-                    LdapResult ldapResult = new LdapResult(LdapResult.ResultCodeEnum.InappropriateAuthentication, null, null);
-                    BindResponse bindResponse = new BindResponse(ldapResult);
-                    LdapMessage outMessage = new LdapMessage(1, bindResponse);
-
-                    MessageEncoder encoder = new MessageEncoder();
-                    byte[] msg = encoder.TryEncode(outMessage);
-
-
+                    DecisionEngine engine = new DecisionEngine();
+                    LdapMessage reply = engine.GenerateReply(message);
+                    
+                    byte[] msg = parser.TryEncodePacket(reply);
+                    stream.Write(msg, 0, msg.Length);
+                
 
 
                     // Send back a response.
                     // FIXME
-                    if (data.Contains("Manager"))
+                    /*if (data.Contains("Manager"))
                     {
                         stream.Write(msg, 0, msg.Length);
                         Console.WriteLine("Foo" + msg);
@@ -66,7 +58,7 @@ namespace LdapServer.Network
                     {
                         //  client.Close();
                         // break;
-                    }
+                    }*/
 
                 }
             });

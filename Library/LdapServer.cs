@@ -2,18 +2,14 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using LdapServer.Models;
-using LdapServer.Models.Operations.Response;
 using LdapServer.Network;
 
 namespace LdapServer
 {
     public class LdapServer
     {
-        private LdapEvents LdapEventListener = new LdapEvents();
-
         public void RegisterEventListener(LdapEvents ldapEvents) {
-            LdapEventListener = ldapEvents;
+            SingletonContainer.SetLdapEventListener(ldapEvents);
         }
 
         public async Task Start()

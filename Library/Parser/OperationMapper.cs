@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using LdapServer.Models.Operations;
 using LdapServer.Parser.Decoder;
+using LdapServer.Parser.Encoder;
 
 namespace LdapServer.Parser
 {
@@ -12,11 +13,13 @@ namespace LdapServer.Parser
     {
         private Dictionary<int, Type> OperationTypeMapper = new Dictionary<int, Type>();
         private Dictionary<int, Type> DecoderTypeMapper = new Dictionary<int, Type>();
+        private Dictionary<int, Type> EncoderTypeMapper = new Dictionary<int, Type>();
 
         internal OperationMapper()
         {
             PopulateOperationTypeMapper();
             PopulateDecoderTypeMapper();
+            PopulateEncoderTypeMapper();
         }
 
         private void PopulateDecoderTypeMapper()
@@ -36,6 +39,23 @@ namespace LdapServer.Parser
             });
         }
 
+        private void PopulateEncoderTypeMapper()
+        {
+            IEnumerable<Type> types = from t in Assembly.GetExecutingAssembly().GetTypes()
+                                      where t.GetInterfaces().Any(i =>
+                                        i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IApplicationEncoder<>)
+                                      )
+                                      select t;
+
+            types.ToList().ForEach(t =>
+            {
+                Type operationType = t.GetInterfaces()[0].GenericTypeArguments[0];
+                KeyValuePair<int, Type> mappedOperation = OperationTypeMapper.First(x => x.Value == operationType);
+
+                EncoderTypeMapper.Add(mappedOperation.Key, t);
+            });
+        }
+
         private void PopulateOperationTypeMapper()
         {
             IEnumerable<Type> types = from t in Assembly.GetExecutingAssembly().GetTypes()
@@ -51,13 +71,14 @@ namespace LdapServer.Parser
             });
         }
 
-        internal Type GetOperationTypeForTag(int tag) {
-            return OperationTypeMapper.Single(t => t.Key == tag).Value;
-        }
-
         internal Type GetDecoderForTag(int tag)
         {
             return DecoderTypeMapper.Single(t => t.Key == tag).Value;
+        }
+
+        internal Type GetEncoderForTag(int tag)
+        {
+            return EncoderTypeMapper.Single(t => t.Key == tag).Value;
         }
     }
 }

@@ -7,8 +7,5 @@ namespace LdapServer.Parser.Decoder
     internal interface IApplicationDecoder<T> where T : IProtocolOp
     {
         T TryDecode(AsnReader reader);
-        Type GetProtocolOp() {
-            return typeof(T);
-        }
     }
 }

@@ -29,13 +29,43 @@ namespace LdapServer.Parser
             return new LdapMessage(messageId, message);
         }
 
+        internal Byte[] TryEncodePacket(LdapMessage message)
+        {
+            OperationMapper mapper = SingletonContainer.GetOperationMapper();
+            Type encoder = mapper.GetEncoderForTag(message.ProtocolOp.GetTag());
+
+            AsnWriter writer = new AsnWriter(AsnEncodingRules.BER);
+
+            object? result = null;
+            using (writer.PushSequence())
+            {
+                writer.WriteInteger(message.MessageId);
+
+                var parameters = new object[] { writer, message.ProtocolOp };
+                object? invokableClass = FormatterServices.GetUninitializedObject(encoder);
+
+                if (invokableClass != null)
+                {
+                    MethodInfo? method = encoder.GetMethod("TryEncode");
+                    if (method != null)
+                    {
+                        result = method.Invoke(invokableClass, parameters);
+                    }
+                }
+            }
+
+            if(result != null) {
+                Byte[] data = writer.Encode();
+                return data;
+            }
+
+            throw new NotImplementedException("The encoder for " + message.ProtocolOp.GetTag() + " is not implemented.");
+        }
+
         private IProtocolOp DecodeApplicationData(int tagValue, AsnReader reader)
         {
-            OperationMapper mapper = new OperationMapper();
-            System.Console.WriteLine("bar");
-
+            OperationMapper mapper = SingletonContainer.GetOperationMapper();
             Type decoder = mapper.GetDecoderForTag(tagValue);
-
 
             var parameters = new object[] { reader };
             object? invokableClass = FormatterServices.GetUninitializedObject(decoder);
