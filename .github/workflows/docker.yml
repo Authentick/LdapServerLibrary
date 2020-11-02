@@ -1,0 +1,24 @@
+
+name: Publish Docker images
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.devcontainer/Dockerfile'
+      - '.github/workflows/docker.yml'
+
+jobs:
+  build-dev:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+  
+    - name: Push to Github Container Registry
+      run: |
+          cd .devcontainer/
+          echo  ${{ secrets.CR_PAT }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+          docker build . --tag ghcr.io/lukasreschke/ldapserver-dev:$GITHUB_SHA
+          docker push ghcr.io/lukasreschke/ldapserver-dev:${GITHUB_SHA}
