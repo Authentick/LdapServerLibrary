@@ -1,20 +1,20 @@
 using System.Numerics;
-using LdapServer.Models.Operations.Request;
+using LdapServer.Models.Operations;
 
 namespace LdapServer.Models
 {
     internal class LdapMessage
     {
         internal readonly BigInteger MessageId;
-        internal readonly IRequest Request;
+        internal readonly IProtocolOp ProtocolOp;
 
         internal LdapMessage(
             BigInteger messageId,
-            IRequest request
+            IProtocolOp protocolOp
             )
         {
             MessageId = messageId;
-            Request = request;
+            ProtocolOp = protocolOp;
         }
     }
 }

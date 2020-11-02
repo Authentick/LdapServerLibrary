@@ -8,13 +8,13 @@ namespace LdapServer
 {
     internal class MessageEncoder
     {
-        internal byte[] TryEncode(LdapMessageOut response)
+        internal byte[] TryEncode(LdapMessage response)
         {
             AsnWriter writer = new AsnWriter(AsnEncodingRules.BER);
 
-            if (typeof(BindResponse) == response.Response.GetType())
+            if (typeof(BindResponse) == response.ProtocolOp.GetType())
             {
-                BindResponse bindResponse = (BindResponse)response.Response;
+                BindResponse bindResponse = (BindResponse)response.ProtocolOp;
 
                 Asn1Tag bindResponseApplication = new Asn1Tag(TagClass.Application, 1);
 

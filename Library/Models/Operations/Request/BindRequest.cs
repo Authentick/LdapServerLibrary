@@ -2,13 +2,13 @@ using System.Numerics;
 
 namespace LdapServer.Models.Operations.Request
 {
-    class BindRequest : IRequest
+    internal class BindRequest : IProtocolOp
     {
-        public readonly BigInteger Version;
-        public readonly string Name;
-        public readonly string Authentication;
+        internal readonly BigInteger Version;
+        internal readonly string Name;
+        internal readonly string Authentication;
 
-        public BindRequest(
+        internal BindRequest(
             BigInteger version,
             string name,
             string authentication)
@@ -16,6 +16,11 @@ namespace LdapServer.Models.Operations.Request
             Version = version;
             Name = name;
             Authentication = authentication;
+        }
+
+        internal override int GetTag()
+        {
+            return 0;
         }
     }
 }
