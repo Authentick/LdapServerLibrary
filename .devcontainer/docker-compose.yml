@@ -1,9 +1,7 @@
 version: '3'
 services:
   ldapserver:
-      build:
-        context: .
-        dockerfile: Dockerfile
+      image: ghcr.io/lukasreschke/ldapserver-dev:218c2d150ddca416d9c1eed0885e882c8a6a6040
       volumes:
         - .:/workspace:cached
         - /var/run/docker.sock:/var/run/docker-host.sock
