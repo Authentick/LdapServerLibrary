@@ -1,22 +1,46 @@
+using System;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using LdapServer.Engine.Handler;
 using LdapServer.Models;
-using LdapServer.Models.Operations.Request;
-using LdapServer.Models.Operations.Response;
 
 namespace LdapServer.Engine
 {
     internal class DecisionEngine
     {
+        private readonly ClientContext _clientContext;
+
+        public DecisionEngine(ClientContext clientContext)
+        {
+            _clientContext = clientContext;
+        }
+
         internal LdapMessage GenerateReply(LdapMessage message)
         {
             LdapEvents eventListener = SingletonContainer.GetLdapEventListener();
 
-            if (message.ProtocolOp.GetType() == typeof(BindRequest))
+            Type protocolType = message.ProtocolOp.GetType();
+            Type handlerType = SingletonContainer.GetHandlerMapper().GetHandlerForType(protocolType);
+
+            var parameters = new object[] { _clientContext, eventListener, message.ProtocolOp};
+            object? invokableClass = FormatterServices.GetUninitializedObject(handlerType);
+
+            if (invokableClass != null)
             {
-                LdapResult ldapResult = new LdapResult(LdapResult.ResultCodeEnum.InappropriateAuthentication, null, null);
-                BindResponse bindResponse = new BindResponse(ldapResult);
-                LdapMessage outMessage = new LdapMessage(1, bindResponse);
-                return outMessage;
+                MethodInfo? method = handlerType.GetMethods(BindingFlags.NonPublic|BindingFlags.Instance).Single(x => x.Name.EndsWith("Handle"));
+
+                if (method != null)
+                {
+                    object result = method.Invoke(invokableClass, parameters);
+                    if (result != null)
+                    {
+                        HandlerReply handlerReply = (HandlerReply) result;
+                        return new LdapMessage(1, handlerReply._protocolOp);
+                    }
+                }
             }
+
             throw new System.Exception();
         }
     }

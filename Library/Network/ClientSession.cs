@@ -22,7 +22,7 @@ namespace LdapServer.Network
 
         internal void StartReceiving()
         {
-            Task taskA = new Task(() =>
+            Task networkTask = new Task(() =>
             {
                 // Buffer for reading data
                 Byte[] bytes = new Byte[2048];
@@ -31,7 +31,8 @@ namespace LdapServer.Network
                 NetworkStream stream = Client.GetStream();
 
                 int i;
-                string? data;
+
+                DecisionEngine engine = new DecisionEngine(new ClientContext());
 
                 // Loop to receive all the data sent by the client.
                 while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
@@ -39,32 +40,14 @@ namespace LdapServer.Network
                     PacketParser parser = new PacketParser();
                     LdapMessage message = parser.TryParsePacket(bytes);
 
-                    DecisionEngine engine = new DecisionEngine();
                     LdapMessage reply = engine.GenerateReply(message);
                     
                     byte[] msg = parser.TryEncodePacket(reply);
                     stream.Write(msg, 0, msg.Length);
-                
-
-
-                    // Send back a response.
-                    // FIXME
-                    /*if (data.Contains("Manager"))
-                    {
-                        stream.Write(msg, 0, msg.Length);
-                        Console.WriteLine("Foo" + msg);
-                    }
-                    else
-                    {
-                        //  client.Close();
-                        // break;
-                    }*/
-
                 }
             });
 
-            // Start the task.
-            taskA.Start();
+            networkTask.Start();
 
         }
     }
