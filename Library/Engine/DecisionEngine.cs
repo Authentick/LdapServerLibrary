@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using LdapServer.Engine.Handler;
 using LdapServer.Models;
+using LdapServer.Models.Operations;
 
 namespace LdapServer.Engine
 {
@@ -16,7 +18,7 @@ namespace LdapServer.Engine
             _clientContext = clientContext;
         }
 
-        internal LdapMessage GenerateReply(LdapMessage message)
+        internal List<LdapMessage> GenerateReply(LdapMessage message)
         {
             LdapEvents eventListener = SingletonContainer.GetLdapEventListener();
 
@@ -35,8 +37,14 @@ namespace LdapServer.Engine
                     object result = method.Invoke(invokableClass, parameters);
                     if (result != null)
                     {
+                        List<LdapMessage> messages = new List<LdapMessage>();
+
                         HandlerReply handlerReply = (HandlerReply) result;
-                        return new LdapMessage(message.MessageId, handlerReply._protocolOp);
+                        foreach (IProtocolOp op in handlerReply._protocolOps) {
+                            messages.Add(new LdapMessage(message.MessageId, op));
+                        }
+
+                        return messages;
                     }
                 }
             }

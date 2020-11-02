@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using LdapServer.Engine;
@@ -40,10 +41,11 @@ namespace LdapServer.Network
                     PacketParser parser = new PacketParser();
                     LdapMessage message = parser.TryParsePacket(bytes);
 
-                    LdapMessage reply = engine.GenerateReply(message);
-                    
-                    byte[] msg = parser.TryEncodePacket(reply);
-                    stream.Write(msg, 0, msg.Length);
+                    List<LdapMessage> replies = engine.GenerateReply(message);
+                    foreach(LdapMessage outMsg in replies) {
+                        byte[] msg = parser.TryEncodePacket(outMsg);
+                        stream.Write(msg, 0, msg.Length);
+                    }
                 }
             });
 

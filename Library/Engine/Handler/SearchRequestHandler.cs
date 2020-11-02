@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using LdapServer.Models.Operations;
 using LdapServer.Models.Operations.Request;
 using LdapServer.Models.Operations.Response;
 using LdapServer.Session.Events;
@@ -10,7 +12,7 @@ namespace LdapServer.Engine.Handler
         {
             LdapResult ldapResult = new LdapResult(LdapResult.ResultCodeEnum.Success, null, null);
             SearchResultDone searchResultDone = new SearchResultDone(ldapResult);
-            return new HandlerReply(searchResultDone);
+            return new HandlerReply(new List<IProtocolOp>{searchResultDone});
         }
     }
 }
