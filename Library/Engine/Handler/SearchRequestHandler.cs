@@ -12,7 +12,7 @@ namespace LdapServer.Engine.Handler
         {
             LdapResult ldapResult = new LdapResult(LdapResult.ResultCodeEnum.Success, null, null);
             SearchResultDone searchResultDone = new SearchResultDone(ldapResult);
-            return new HandlerReply(new List<IProtocolOp>{searchResultDone});
+            return new HandlerReply(new List<IProtocolOp>{new SearchResultEntry(), searchResultDone});
         }
     }
 }
