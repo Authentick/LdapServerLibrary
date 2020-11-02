@@ -36,7 +36,7 @@ namespace LdapServer.Engine
                     if (result != null)
                     {
                         HandlerReply handlerReply = (HandlerReply) result;
-                        return new LdapMessage(1, handlerReply._protocolOp);
+                        return new LdapMessage(message.MessageId, handlerReply._protocolOp);
                     }
                 }
             }

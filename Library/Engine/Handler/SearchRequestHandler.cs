@@ -8,9 +8,9 @@ namespace LdapServer.Engine.Handler
     {
         HandlerReply IRequestHandler<SearchRequest>.Handle(ClientContext context, LdapEvents eventListener, SearchRequest operation)
         {
-            System.Console.WriteLine("Search Request");
-            System.Console.WriteLine(context.UserId);
-            throw new System.Exception("Not implemented");
+            LdapResult ldapResult = new LdapResult(LdapResult.ResultCodeEnum.Success, null, null);
+            SearchResultDone searchResultDone = new SearchResultDone(ldapResult);
+            return new HandlerReply(searchResultDone);
         }
     }
 }
