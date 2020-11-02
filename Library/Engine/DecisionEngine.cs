@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using LdapServer.Engine.Handler;
 using LdapServer.Models;
 using LdapServer.Models.Operations;
+using LdapServer.Models.Operations.Request;
 
 namespace LdapServer.Engine
 {
@@ -20,6 +21,11 @@ namespace LdapServer.Engine
 
         internal List<LdapMessage> GenerateReply(LdapMessage message)
         {
+            // Require authentication for everything that isn't a bind
+            if(!_clientContext.IsAuthenticated && message.ProtocolOp.GetType() != typeof(BindRequest)) {
+                throw new Exception("User is not authenticated");
+            }
+
             LdapEvents eventListener = SingletonContainer.GetLdapEventListener();
 
             Type protocolType = message.ProtocolOp.GetType();
