@@ -1,17 +1,17 @@
 namespace LdapServer.Models.Operations.Response
 {
-    internal class BindResponse : IProtocolOp
+    internal class SearchResultDone : IProtocolOp
     {
         internal readonly LdapResult LdapResult;
 
-        internal BindResponse(LdapResult ldapResult)
+        internal SearchResultDone(LdapResult ldapResult)
         {
             LdapResult = ldapResult;
         }
 
         int IProtocolOp.GetTag()
         {
-            return 1;
+            return 5;
         }
     }
 }

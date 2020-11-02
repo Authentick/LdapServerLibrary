@@ -1,14 +1,15 @@
+using System.Collections.Generic;
 using LdapServer.Models.Operations;
 
 namespace LdapServer.Engine.Handler
 {
     internal class HandlerReply
     {
-        internal readonly IProtocolOp _protocolOp;
+        internal readonly List<IProtocolOp> _protocolOps;
 
-        public HandlerReply(IProtocolOp protocolOp)
+        public HandlerReply(List<IProtocolOp> protocolOps)
         {
-            _protocolOp = protocolOp;
+            _protocolOps = protocolOps;
         }
     }
 }

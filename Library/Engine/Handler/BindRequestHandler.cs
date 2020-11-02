@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using LdapServer.Models.Operations;
 using LdapServer.Models.Operations.Request;
 using LdapServer.Models.Operations.Response;
 using LdapServer.Session.Events;
@@ -18,7 +20,7 @@ namespace LdapServer.Engine.Handler
 
                 LdapResult ldapResult = new LdapResult(LdapResult.ResultCodeEnum.Success, null, null);
                 BindResponse bindResponse = new BindResponse(ldapResult);
-                return new HandlerReply(bindResponse);
+                return new HandlerReply(new List<IProtocolOp> { bindResponse });
             }
             else
             {
@@ -27,7 +29,7 @@ namespace LdapServer.Engine.Handler
 
                 LdapResult ldapResult = new LdapResult(LdapResult.ResultCodeEnum.InappropriateAuthentication, null, null);
                 BindResponse bindResponse = new BindResponse(ldapResult);
-                return new HandlerReply(bindResponse);
+                return new HandlerReply(new List<IProtocolOp> { bindResponse });
             }
         }
     }
