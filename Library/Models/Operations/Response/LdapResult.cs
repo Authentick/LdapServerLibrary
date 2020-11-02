@@ -19,7 +19,8 @@ namespace LdapServer.Models.Operations.Response
 
         internal enum ResultCodeEnum
         {
-            Success = 1,
+            Success = 0,
+            OperationsError = 1,
             InappropriateAuthentication = 48,
             InvalidCredentials = 49,
         }

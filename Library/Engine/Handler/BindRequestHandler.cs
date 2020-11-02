@@ -13,12 +13,18 @@ namespace LdapServer.Engine.Handler
 
             if (success)
             {
+                context.IsAuthenticated = true;
+                context.UserId = operation.Name;
+
                 LdapResult ldapResult = new LdapResult(LdapResult.ResultCodeEnum.Success, null, null);
                 BindResponse bindResponse = new BindResponse(ldapResult);
                 return new HandlerReply(bindResponse);
             }
             else
             {
+                context.IsAuthenticated = false;
+                context.UserId = null;
+
                 LdapResult ldapResult = new LdapResult(LdapResult.ResultCodeEnum.InappropriateAuthentication, null, null);
                 BindResponse bindResponse = new BindResponse(ldapResult);
                 return new HandlerReply(bindResponse);

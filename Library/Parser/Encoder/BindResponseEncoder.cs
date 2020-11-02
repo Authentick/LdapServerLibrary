@@ -1,4 +1,3 @@
-using System;
 using System.Formats.Asn1;
 using LdapServer.Models.Operations.Response;
 
@@ -13,7 +12,7 @@ namespace LdapServer.Parser.Encoder
             {
                 writer.WriteEnumeratedValue(message.LdapResult.ResultCode);
                 writer.WriteOctetString(System.Text.Encoding.ASCII.GetBytes(""));
-                writer.WriteOctetString(System.Text.Encoding.ASCII.GetBytes("Stuff failed"));
+                writer.WriteOctetString(System.Text.Encoding.ASCII.GetBytes(""));
             }
 
             return writer;

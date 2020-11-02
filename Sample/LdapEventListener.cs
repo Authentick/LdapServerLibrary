@@ -5,7 +5,11 @@ namespace Sample {
     class LdapEventListener : LdapEvents
     {
         public override bool OnAuthenticationRequest(ClientContext context, AuthenticationEvent authenticationEvent) {
-            return true;
+            if(authenticationEvent.Username == "cn=Manager,dc=ldap,dc=net" && authenticationEvent.Password == "test") {
+                return true;
+            }
+
+            return false;
         }
     }
 }
