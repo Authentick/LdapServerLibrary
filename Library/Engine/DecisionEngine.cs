@@ -22,8 +22,12 @@ namespace LdapServer.Engine
 
         internal async Task<List<LdapMessage>> GenerateReply(LdapMessage message)
         {
-            // Require authentication for everything that isn't a bind
-            if (!_clientContext.IsAuthenticated && message.ProtocolOp.GetType() != typeof(BindRequest))
+            // Authentication check
+            List<Type> publicOperations = new List<Type>{
+                typeof(BindRequest),
+                typeof(UnbindRequest),
+            };
+            if (!_clientContext.IsAuthenticated && !publicOperations.Contains(message.ProtocolOp.GetType()))
             {
                 throw new Exception("User is not authenticated");
             }
@@ -45,7 +49,7 @@ namespace LdapServer.Engine
                     Task resultTask = (Task)method.Invoke(invokableClass, parameters);
                     await resultTask;
                     PropertyInfo? propertInfo = resultTask.GetType().GetProperty("Result");
-                    object  result = propertInfo.GetValue(resultTask);
+                    object result = propertInfo.GetValue(resultTask);
 
                     if (result != null)
                     {
