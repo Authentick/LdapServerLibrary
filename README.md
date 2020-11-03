@@ -5,6 +5,7 @@ This is a work-in-progress LDAP server library written in C#.
 ## Supported
 
 - BindRequest
+- UnbindRequest
 
 ## Sample
 

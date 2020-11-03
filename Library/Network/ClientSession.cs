@@ -23,7 +23,7 @@ namespace LdapServer.Network
 
         internal void StartReceiving()
         {
-            Task networkTask = new Task(() =>
+            Task networkTask = new Task(async () =>
             {
                 // Buffer for reading data
                 Byte[] bytes = new Byte[2048];
@@ -41,7 +41,7 @@ namespace LdapServer.Network
                     PacketParser parser = new PacketParser();
                     LdapMessage message = parser.TryParsePacket(bytes);
 
-                    List<LdapMessage> replies = engine.GenerateReply(message);
+                    List<LdapMessage> replies = await engine.GenerateReply(message);
                     foreach(LdapMessage outMsg in replies) {
                         byte[] msg = parser.TryEncodePacket(outMsg);
                         stream.Write(msg, 0, msg.Length);

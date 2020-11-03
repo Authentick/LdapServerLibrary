@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using LdapServer.Models.Operations;
 using LdapServer.Models.Operations.Request;
 using LdapServer.Models.Operations.Response;
@@ -8,10 +9,10 @@ namespace LdapServer.Engine.Handler
 {
     internal class BindRequestHandler : IRequestHandler<BindRequest>
     {
-        HandlerReply IRequestHandler<BindRequest>.Handle(ClientContext context, LdapEvents eventListener, BindRequest operation)
+        async Task<HandlerReply> IRequestHandler<BindRequest>.Handle(ClientContext context, LdapEvents eventListener, BindRequest operation)
         {
             AuthenticationEvent authEvent = new AuthenticationEvent(operation.Name, operation.Authentication);
-            bool success = eventListener.OnAuthenticationRequest(new ClientContext(), authEvent);
+            bool success = await eventListener.OnAuthenticationRequest(new ClientContext(), authEvent);
 
             if (success)
             {

@@ -1,7 +1,7 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using LdapServer.Models.Operations.Request;
-using LdapServer.Models.Operations.Response;
 using LdapServer.Session.Events;
+using LdapServer.Session.Replies;
 
 namespace LdapServer
 {
@@ -13,8 +13,20 @@ namespace LdapServer
         /// <param name="context"></param>
         /// <param name="authenticationEvent"></param>
         /// <returns>Whether the authentication should succeed or not</returns>
-        public virtual bool OnAuthenticationRequest(ClientContext context, AuthenticationEvent authenticationEvent) {
-            return false;
+        public virtual Task<bool> OnAuthenticationRequest(ClientContext context, AuthenticationEvent authenticationEvent)
+        {
+            return Task.FromResult(false);
+        }
+
+        /// <summary>
+        /// Override this for search request support.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="searchEvent"></param>
+        /// <returns>List of search replies</returns>
+        public virtual Task<List<SearchResultReply>> OnSearchRequest(ClientContext context, SearchEvent searchEvent)
+        {
+            return Task.FromResult(new List<SearchResultReply>());
         }
     }
 }
