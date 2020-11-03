@@ -8,16 +8,6 @@ namespace Sample
 {
     class LdapEventListener : LdapEvents
     {
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
         public override Task<bool> OnAuthenticationRequest(ClientContext context, AuthenticationEvent authenticationEvent)
         {
             if (authenticationEvent.Username == "cn=Manager,dc=ldap,dc=net" && authenticationEvent.Password == "test")
