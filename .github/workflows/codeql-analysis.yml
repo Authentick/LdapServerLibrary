@@ -72,7 +72,7 @@ jobs:
       with:
         dotnet-version: 5.0.100
     - name: Build
-      run: dotnet build --configuration Release Gatekeeper.LdapServerLibrary/LdapServerLibrary.csproj
+      run: dotnet build --configuration Release Gatekeeper.LdapServerLibrary/Gatekeeper.LdapServerLibrary.csproj
   
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
