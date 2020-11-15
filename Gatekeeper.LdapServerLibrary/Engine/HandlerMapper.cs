@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using LdapServer.Engine.Handler;
+using Gatekeeper.LdapServerLibrary.Engine.Handler;
 
-namespace LdapServer.Engine
+namespace Gatekeeper.LdapServerLibrary.Engine
 {
     internal class HandlerMapper
     {

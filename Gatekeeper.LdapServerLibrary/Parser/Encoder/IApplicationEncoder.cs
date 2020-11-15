@@ -1,7 +1,7 @@
 using System.Formats.Asn1;
-using LdapServer.Models.Operations;
+using Gatekeeper.LdapServerLibrary.Models.Operations;
 
-namespace LdapServer.Parser.Encoder
+namespace Gatekeeper.LdapServerLibrary.Parser.Encoder
 {
     internal interface IApplicationEncoder<T> where T : IProtocolOp
     {

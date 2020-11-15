@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LdapServer.Models.Operations;
-using LdapServer.Models.Operations.Request;
-using LdapServer.Models.Operations.Response;
-using LdapServer.Session.Events;
+using Gatekeeper.LdapServerLibrary.Models.Operations;
+using Gatekeeper.LdapServerLibrary.Models.Operations.Request;
+using Gatekeeper.LdapServerLibrary.Models.Operations.Response;
+using Gatekeeper.LdapServerLibrary.Session.Events;
 
-namespace LdapServer.Engine.Handler
+namespace Gatekeeper.LdapServerLibrary.Engine.Handler
 {
     internal class BindRequestHandler : IRequestHandler<BindRequest>
     {

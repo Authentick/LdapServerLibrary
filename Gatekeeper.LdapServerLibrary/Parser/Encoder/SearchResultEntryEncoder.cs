@@ -1,8 +1,8 @@
 using System.Formats.Asn1;
-using LdapServer.Models.Operations.Response;
-using static LdapServer.Session.Replies.SearchResultReply;
+using Gatekeeper.LdapServerLibrary.Models.Operations.Response;
+using static Gatekeeper.LdapServerLibrary.Session.Replies.SearchResultReply;
 
-namespace LdapServer.Parser.Encoder
+namespace Gatekeeper.LdapServerLibrary.Parser.Encoder
 {
     internal class SearchResultEntryEncoder : IApplicationEncoder<SearchResultEntry>
     {

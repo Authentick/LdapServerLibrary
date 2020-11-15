@@ -1,4 +1,4 @@
-namespace LdapServer.Models.Operations.Request
+namespace Gatekeeper.LdapServerLibrary.Models.Operations.Request
 {
     internal class UnbindRequest : IProtocolOp
     {

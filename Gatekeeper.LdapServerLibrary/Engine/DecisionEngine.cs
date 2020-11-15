@@ -4,12 +4,12 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using LdapServer.Engine.Handler;
-using LdapServer.Models;
-using LdapServer.Models.Operations;
-using LdapServer.Models.Operations.Request;
+using Gatekeeper.LdapServerLibrary.Engine.Handler;
+using Gatekeeper.LdapServerLibrary.Models;
+using Gatekeeper.LdapServerLibrary.Models.Operations;
+using Gatekeeper.LdapServerLibrary.Models.Operations.Request;
 
-namespace LdapServer.Engine
+namespace Gatekeeper.LdapServerLibrary.Engine
 {
     internal class DecisionEngine
     {

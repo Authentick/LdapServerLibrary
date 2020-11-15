@@ -1,7 +1,7 @@
-using LdapServer.Engine;
-using LdapServer.Parser;
+using Gatekeeper.LdapServerLibrary.Engine;
+using Gatekeeper.LdapServerLibrary.Parser;
 
-namespace LdapServer
+namespace Gatekeeper.LdapServerLibrary
 {
     internal class SingletonContainer
     {

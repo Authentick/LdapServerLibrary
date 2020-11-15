@@ -1,7 +1,7 @@
 using System.Formats.Asn1;
 using System.Numerics;
 
-namespace LdapServer.Models.Operations.Request
+namespace Gatekeeper.LdapServerLibrary.Models.Operations.Request
 {
     internal class BindRequest : IProtocolOp
     {

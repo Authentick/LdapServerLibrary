@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using LdapServer.Models.Operations;
+using Gatekeeper.LdapServerLibrary.Models.Operations;
 
-namespace LdapServer.Engine.Handler
+namespace Gatekeeper.LdapServerLibrary.Engine.Handler
 {
     internal class HandlerReply
     {

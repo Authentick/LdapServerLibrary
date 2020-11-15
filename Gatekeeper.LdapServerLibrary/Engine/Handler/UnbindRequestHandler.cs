@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LdapServer.Models.Operations;
-using LdapServer.Models.Operations.Request;
+using Gatekeeper.LdapServerLibrary.Models.Operations;
+using Gatekeeper.LdapServerLibrary.Models.Operations.Request;
 
-namespace LdapServer.Engine.Handler
+namespace Gatekeeper.LdapServerLibrary.Engine.Handler
 {
     internal class UnbindRequestHandler : IRequestHandler<UnbindRequest>
     {

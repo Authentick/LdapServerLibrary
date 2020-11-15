@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 
-namespace LdapServer.Network
+namespace Gatekeeper.LdapServerLibrary.Network
 {
     internal class ConnectionManager
     {

@@ -1,8 +1,8 @@
 using System.Formats.Asn1;
 using System.Numerics;
-using LdapServer.Models.Operations.Request;
+using Gatekeeper.LdapServerLibrary.Models.Operations.Request;
 
-namespace LdapServer.Parser.Decoder
+namespace Gatekeeper.LdapServerLibrary.Parser.Decoder
 {
     internal class SearchRequestDecoder : IApplicationDecoder<SearchRequest>
     {

@@ -6,12 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Library\LdapServer.csproj" />
+    <ProjectReference Include="..\Gatekeeper.LdapServerLibrary\LdapServerLibrary.csproj" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <Watch Include="../Library/*.cs" />
+    <Watch Include="..\Gatekeeper.LdapServerLibrary/*.cs" />
   </ItemGroup>
 
 </Project>

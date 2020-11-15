@@ -1,4 +1,4 @@
-namespace LdapServer.Models.Operations.Response
+namespace Gatekeeper.LdapServerLibrary.Models.Operations.Response
 {
     internal class BindResponse : IProtocolOp
     {

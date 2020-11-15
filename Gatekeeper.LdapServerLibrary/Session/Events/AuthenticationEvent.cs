@@ -1,4 +1,4 @@
-namespace LdapServer.Session.Events
+namespace Gatekeeper.LdapServerLibrary.Session.Events
 {
     public class AuthenticationEvent
     {

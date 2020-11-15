@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace LdapServer.Network
+namespace Gatekeeper.LdapServerLibrary.Network
 {
     internal class NetworkListener
     {

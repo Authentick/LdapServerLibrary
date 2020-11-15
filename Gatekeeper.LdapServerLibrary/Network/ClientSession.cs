@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using LdapServer.Engine;
-using LdapServer.Models;
-using LdapServer.Models.Operations.Request;
-using LdapServer.Models.Operations.Response;
-using LdapServer.Parser;
+using Gatekeeper.LdapServerLibrary.Engine;
+using Gatekeeper.LdapServerLibrary.Models;
+using Gatekeeper.LdapServerLibrary.Models.Operations.Request;
+using Gatekeeper.LdapServerLibrary.Models.Operations.Response;
+using Gatekeeper.LdapServerLibrary.Parser;
 
-namespace LdapServer.Network
+namespace Gatekeeper.LdapServerLibrary.Network
 {
     internal class ClientSession
     {

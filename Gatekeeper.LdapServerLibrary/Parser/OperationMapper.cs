@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using LdapServer.Models.Operations;
-using LdapServer.Parser.Decoder;
-using LdapServer.Parser.Encoder;
+using Gatekeeper.LdapServerLibrary.Models.Operations;
+using Gatekeeper.LdapServerLibrary.Parser.Decoder;
+using Gatekeeper.LdapServerLibrary.Parser.Encoder;
 
-namespace LdapServer.Parser
+namespace Gatekeeper.LdapServerLibrary.Parser
 {
     internal class OperationMapper
     {

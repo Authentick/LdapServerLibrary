@@ -2,9 +2,9 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using LdapServer.Network;
+using Gatekeeper.LdapServerLibrary.Network;
 
-namespace LdapServer
+namespace Gatekeeper.LdapServerLibrary
 {
     public class LdapServer
     {

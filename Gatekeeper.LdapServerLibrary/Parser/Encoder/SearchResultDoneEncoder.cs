@@ -1,7 +1,7 @@
 using System.Formats.Asn1;
-using LdapServer.Models.Operations.Response;
+using Gatekeeper.LdapServerLibrary.Models.Operations.Response;
 
-namespace LdapServer.Parser.Encoder
+namespace Gatekeeper.LdapServerLibrary.Parser.Encoder
 {
     internal class SearchResultDoneEncoder : IApplicationEncoder<SearchResultDone>
     {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace LdapServer.Session.Replies
+namespace Gatekeeper.LdapServerLibrary.Session.Replies
 {
     public class SearchResultReply
     {

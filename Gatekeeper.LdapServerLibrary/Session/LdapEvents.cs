@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LdapServer.Session.Events;
-using LdapServer.Session.Replies;
+using Gatekeeper.LdapServerLibrary.Session.Events;
+using Gatekeeper.LdapServerLibrary.Session.Replies;
 
-namespace LdapServer
+namespace Gatekeeper.LdapServerLibrary
 {
     public class LdapEvents
     {

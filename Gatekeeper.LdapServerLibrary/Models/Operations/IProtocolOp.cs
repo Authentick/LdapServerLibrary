@@ -1,6 +1,6 @@
 using System.Formats.Asn1;
 
-namespace LdapServer.Models.Operations
+namespace Gatekeeper.LdapServerLibrary.Models.Operations
 {
     internal interface IProtocolOp
     {

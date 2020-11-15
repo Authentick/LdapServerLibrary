@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LdapServer.Models.Operations;
-using LdapServer.Models.Operations.Request;
-using LdapServer.Models.Operations.Response;
-using LdapServer.Session.Events;
-using LdapServer.Session.Replies;
+using Gatekeeper.LdapServerLibrary.Models.Operations;
+using Gatekeeper.LdapServerLibrary.Models.Operations.Request;
+using Gatekeeper.LdapServerLibrary.Models.Operations.Response;
+using Gatekeeper.LdapServerLibrary.Session.Events;
+using Gatekeeper.LdapServerLibrary.Session.Replies;
 
-namespace LdapServer.Engine.Handler
+namespace Gatekeeper.LdapServerLibrary.Engine.Handler
 {
     internal class SearchRequestHandler : IRequestHandler<SearchRequest>
     {

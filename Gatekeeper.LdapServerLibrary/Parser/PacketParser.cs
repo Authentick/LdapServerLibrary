@@ -3,10 +3,10 @@ using System.Formats.Asn1;
 using System.Numerics;
 using System.Reflection;
 using System.Runtime.Serialization;
-using LdapServer.Models;
-using LdapServer.Models.Operations;
+using Gatekeeper.LdapServerLibrary.Models;
+using Gatekeeper.LdapServerLibrary.Models.Operations;
 
-namespace LdapServer.Parser
+namespace Gatekeeper.LdapServerLibrary.Parser
 {
     internal class PacketParser
     {

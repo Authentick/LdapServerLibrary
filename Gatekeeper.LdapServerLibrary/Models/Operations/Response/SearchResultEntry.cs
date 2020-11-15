@@ -1,6 +1,6 @@
-using LdapServer.Session.Replies;
+using Gatekeeper.LdapServerLibrary.Session.Replies;
 
-namespace LdapServer.Models.Operations.Response
+namespace Gatekeeper.LdapServerLibrary.Models.Operations.Response
 {
     internal class SearchResultEntry : IProtocolOp
     {

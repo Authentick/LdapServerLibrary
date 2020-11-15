@@ -1,7 +1,7 @@
 using System.Numerics;
-using LdapServer.Models.Operations;
+using Gatekeeper.LdapServerLibrary.Models.Operations;
 
-namespace LdapServer.Models
+namespace Gatekeeper.LdapServerLibrary.Models
 {
     internal class LdapMessage
     {
