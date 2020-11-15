@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <Version>0.0.1-alpha</Version>
+    <Authors>Lukas Reschke</Authors>
+    <Company>Gatekeeper</Company>
+    <Description>
+      This library implements a simple LDAP Server written in C#, which can be embedded into your applications.
+      
+      API reference can be found at https://github.com/GetGatekeeper/LdapServerLibrary
+    </Description>
+    <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/GetGatekeeper/LdapServerLibrary</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/GetGatekeeper/LdapServerLibrary.git</RepositoryUrl>
+    <PackageReleaseNotes>
+      Initial release. Currently supported are the following LDAP requests:
+
+      - BindRequest
+      - UnbindRequest
+    </PackageReleaseNotes>
+    <RepositoryType>git</RepositoryType>
+    <Title>Gatekeeper.LdapServerLibrary</Title>
+  </PropertyGroup>
+
+</Project>

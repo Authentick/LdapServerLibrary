@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Gatekeeper.LdapServerLibrary\LdapServerLibrary.csproj" />
+    <ProjectReference Include="..\Gatekeeper.LdapServerLibrary\Gatekeeper.LdapServerLibrary.csproj" />
   </ItemGroup>
 
 
