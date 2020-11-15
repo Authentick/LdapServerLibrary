@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using LdapServer;
-using LdapServer.Session.Events;
-using LdapServer.Session.Replies;
+using Gatekeeper.LdapServerLibrary;
+using Gatekeeper.LdapServerLibrary.Session.Events;
+using Gatekeeper.LdapServerLibrary.Session.Replies;
 
 namespace Sample
 {
@@ -22,9 +22,9 @@ namespace Sample
         {
             List<SearchResultReply> replies = new List<SearchResultReply>();
 
-            
+
             SearchResultReply reply1 = new SearchResultReply(
-                "cn=test,dc=ldap,dc=net", 
+                "cn=test,dc=ldap,dc=net",
                 new List<SearchResultReply.Attribute>()
             );
             SearchResultReply reply2 = new SearchResultReply(

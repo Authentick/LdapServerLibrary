@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Gatekeeper.LdapServerLibrary;
 
 namespace Sample
 {
@@ -6,7 +7,7 @@ namespace Sample
     {
         static async Task Main(string[] args)
         {
-          LdapServer.LdapServer server = new LdapServer.LdapServer();
+          LdapServer server = new LdapServer();
           server.RegisterEventListener(new LdapEventListener());
           await server.Start();
         }
