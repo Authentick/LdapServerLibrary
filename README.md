@@ -1,13 +1,13 @@
 # [WIP] LDAP Server
 
-This is a work-in-progress LDAP server library written in C#.
+This is a work-in-progress LDAP server library written in C#. 
 
 ## Supported
 
 - BindRequest
 - UnbindRequest
 
-## Get via Nuget
+## Get via NuGet
 
 You can get this library via Nuget: https://www.nuget.org/packages/Gatekeeper.LdapServerLibrary
 
