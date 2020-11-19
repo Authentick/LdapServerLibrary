@@ -12,8 +12,8 @@ The sample application provided in the "Sample" folder can easily be intercepted
 
 ```
 cd Sample/ && dotnet run
-ldapsearch -w test -H ldap://localhost -b "dc=example,dc=com" -D "cn=Manager,dc=example,dc=com" "cn=test1"
-tcpdump -i lo -w output.dump port 389
+ldapsearch -w test -H ldap://localhost:3389 -b "dc=example,dc=com" -D "cn=Manager,dc=example,dc=com" "cn=test1"
+tcpdump -i lo -w output.dump port 3389
 ```
 
 Once done, download "output.dump" and open it in Wireshark. This will give you a good overview of the behaviour.

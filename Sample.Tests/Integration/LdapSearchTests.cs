@@ -23,7 +23,7 @@ namespace Sample.Tests.Integration
 
         private string ExecuteLdapSearch(string search)
         {
-            string arguments = "-w test -H ldap://localhost -b \"dc=example,dc=com\" -D \"cn=Manager,dc=example,dc=com\" " + search;
+            string arguments = "-w test -H ldap://localhost:3389 -b \"dc=example,dc=com\" -D \"cn=Manager,dc=example,dc=com\" " + search;
             ProcessStartInfo startInfo = new ProcessStartInfo()
             {
                 FileName = "/usr/bin/ldapsearch",
@@ -37,7 +37,8 @@ namespace Sample.Tests.Integration
             p.WaitForExit();
 
             string error = p.StandardError.ReadToEnd();
-            if(error != "") {
+            if (error != "")
+            {
                 return error;
             }
 
