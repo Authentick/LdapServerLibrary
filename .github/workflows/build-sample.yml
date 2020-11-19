@@ -22,4 +22,4 @@ jobs:
     - name: Install ldapsearch
       run: sudo apt-get update && sudo apt-get -y install ldap-utils
     - name: Test
-      run: dotnet test Sample.Tests/
+      run: sudo dotnet test Sample.Tests/
