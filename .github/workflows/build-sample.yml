@@ -20,6 +20,6 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release Sample/Sample.csproj
     - name: Install ldapsearch
-      run: apt-get -y install ldap-utils
+      run: sudo apt-get -y install ldap-utils
     - name: Test
       run: dotnet test Sample.Tests/
