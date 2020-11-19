@@ -10,7 +10,7 @@ The repository includes a dev container that ships all the required dependencies
 
 The sample application provided in the "Sample" folder can easily be intercepted with tcpdump:
 
-```
+```bash
 cd Sample/ && dotnet run
 ldapsearch -w test -H ldap://localhost:3389 -b "dc=example,dc=com" -D "cn=Manager,dc=example,dc=com" "cn=test1"
 tcpdump -i lo -w output.dump port 3389
