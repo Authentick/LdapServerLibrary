@@ -12,7 +12,9 @@ namespace Gatekeeper.LdapServerLibrary.Engine.Handler
     {
         async Task<HandlerReply> IRequestHandler<SearchRequest>.Handle(ClientContext context, LdapEvents eventListener, SearchRequest operation)
         {
-            SearchEvent searchEvent = new SearchEvent();
+            SearchEvent searchEvent = new SearchEvent{
+                Filter = operation.Filter,
+            };
             List<SearchResultReply> replies = await eventListener.OnSearchRequest(new ClientContext(), searchEvent);
 
             List<IProtocolOp> opReply = new List<IProtocolOp>();

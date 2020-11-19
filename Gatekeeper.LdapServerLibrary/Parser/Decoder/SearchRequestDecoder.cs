@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.Formats.Asn1;
 using System.Numerics;
 using Gatekeeper.LdapServerLibrary.Models.Operations.Request;
+using static Gatekeeper.LdapServerLibrary.Session.Events.SearchEvent;
 
 namespace Gatekeeper.LdapServerLibrary.Parser.Decoder
 {
@@ -18,17 +21,60 @@ namespace Gatekeeper.LdapServerLibrary.Parser.Decoder
             BigInteger timeLimit = subReader.ReadInteger();
             bool typesOnly = subReader.ReadBoolean();
 
-            switch(subReader.PeekTag().TagValue) {
-                case 3:
-                    AsnReader subsubreader = subReader.ReadSequence(new Asn1Tag(TagClass.ContextSpecific, 3));
-                    string attributeDescription = System.Text.Encoding.ASCII.GetString(subsubreader.ReadOctetString());
-                    string assertionValue =  System.Text.Encoding.ASCII.GetString(subsubreader.ReadOctetString());
-                    break;
-            }
-
             SearchRequest searchRequest = new SearchRequest();
+            searchRequest.Filter = DecodeSearchFilter(subReader);
+
+            //            subReader.ThrowIfNotEmpty();
 
             return searchRequest;
         }
+
+        private TFilter DecodeAttributeValueAssertionFilter<TFilter>(AsnReader reader) where TFilter : AttributeValueAssertionFilter, new()
+        {
+            AsnReader subReader = reader.ReadSequence(new Asn1Tag(TagClass.ContextSpecific, reader.PeekTag().TagValue));
+            string attributeDescription = System.Text.Encoding.ASCII.GetString(subReader.ReadOctetString());
+            string assertionValue = System.Text.Encoding.ASCII.GetString(subReader.ReadOctetString());
+
+            return new TFilter { AssertionValue = assertionValue, AttributeDesc = attributeDescription };
+        }
+
+        private List<IFilterChoice> DecodeRecursiveFilterSets(AsnReader reader)
+        {
+            AsnReader subReader = reader.ReadSetOf(new Asn1Tag(TagClass.ContextSpecific, reader.PeekTag().TagValue));
+            List<IFilterChoice> filters = new List<IFilterChoice>();
+
+            while (subReader.HasData)
+            {
+                filters.Add(DecodeSearchFilter(subReader));
+            }
+
+            return filters;
+        }
+
+        private IFilterChoice DecodeSearchFilter(AsnReader reader)
+        {
+            switch (reader.PeekTag().TagValue)
+            {
+                case 0:
+                    return new AndFilter { Filters = DecodeRecursiveFilterSets(reader) };
+                case 1:
+                    return new OrFilter { Filters = DecodeRecursiveFilterSets(reader) };
+                case 2:
+                    return new NotFilter { Filter = DecodeSearchFilter(reader) };
+                case 3:
+                    return DecodeAttributeValueAssertionFilter<EqualityMatchFilter>(reader);
+                case 5:
+                    return DecodeAttributeValueAssertionFilter<GreaterOrEqualFilter>(reader);
+                case 6:
+                    return DecodeAttributeValueAssertionFilter<LessOrEqualFilter>(reader);
+                case 7:
+                    return new PresentFilter { Value = System.Text.Encoding.ASCII.GetString(reader.ReadOctetString()) };
+                case 8:
+                    return DecodeAttributeValueAssertionFilter<ApproxMatchFilter>(reader);
+                default:
+                    throw new NotImplementedException("Cannot decode the tag: " + reader.PeekTag().TagValue);
+            }
+        }
+
     }
 }

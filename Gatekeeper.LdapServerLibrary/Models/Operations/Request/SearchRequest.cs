@@ -1,5 +1,4 @@
-using System.Formats.Asn1;
-using System.Numerics;
+using static Gatekeeper.LdapServerLibrary.Session.Events.SearchEvent;
 
 namespace Gatekeeper.LdapServerLibrary.Models.Operations.Request
 {
@@ -14,6 +13,8 @@ namespace Gatekeeper.LdapServerLibrary.Models.Operations.Request
         {
             return 3;
         }
+
+        internal IFilterChoice Filter = null!;
 
         internal enum ScopeEnum
         {
