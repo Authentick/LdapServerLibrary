@@ -12,7 +12,7 @@ The sample application provided in the "Sample" folder can easily be intercepted
 
 ```
 cd Sample/ && dotnet run
-ldapsearch -W -H ldap://localhost -b "dc=ldap,dc=net" -D "cn=Manager,dc=ldap,dc=net" "uid=test"
+ldapsearch -w test -H ldap://localhost -b "dc=example,dc=com" -D "cn=Manager,dc=example,dc=com" "cn=test1"
 tcpdump -i lo -w output.dump port 389
 ```
 

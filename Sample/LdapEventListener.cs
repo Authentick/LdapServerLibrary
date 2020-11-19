@@ -14,7 +14,7 @@ namespace Sample
     {
         public override Task<bool> OnAuthenticationRequest(ClientContext context, AuthenticationEvent authenticationEvent)
         {
-            if (authenticationEvent.Username == "cn=Manager,dc=ldap,dc=net" && authenticationEvent.Password == "test")
+            if (authenticationEvent.Username == "cn=Manager,dc=example,dc=com" && authenticationEvent.Password == "test")
             {
                 return Task.FromResult(true);
             }
@@ -36,7 +36,7 @@ namespace Sample
             var valueExpr = Expression.Property(pe, "Cn");
 
             Expression left = Expression.Call(valueExpr, typeof(string).GetMethod("ToLower", System.Type.EmptyTypes));
-            Expression right = Expression.Constant("cn=" + filter.AssertionValue + ",dc=ldap,dc=net");
+            Expression right = Expression.Constant("cn=" + filter.AssertionValue + ",dc=example,dc=com");
             Expression e1 = Expression.Equal(left, right);
 
             MethodCallExpression whereCallExpression = Expression.Call(

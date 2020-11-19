@@ -3,9 +3,9 @@ using Gatekeeper.LdapServerLibrary;
 
 namespace Sample
 {
-    class Program
+    public class Program
     {
-        static async Task Main(string[] args)
+        public static async Task Main(string[] args)
         {
           LdapServer server = new LdapServer();
           server.RegisterEventListener(new LdapEventListener());

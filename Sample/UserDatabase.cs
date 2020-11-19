@@ -6,29 +6,29 @@ namespace Sample
     {
         private readonly List<User> Users = new List<User>{
             new User{
-                Cn = "cn=test1,dc=ldap,dc=net",
+                Cn = "cn=test1,dc=example,dc=com",
                 Attributes = new Dictionary<string, List<string>>(){
-                    {"Email", new List<string>(){"test1@ldap.net"}},
+                    {"Email", new List<string>(){"test1@example.com"}},
                     {"Role", new List<string>(){"Administrator"}},
                 },
             },
             new User{
-                Cn = "cn=test2,dc=ldap,dc=net",
+                Cn = "cn=test2,dc=example,dc=com",
                 Attributes = new Dictionary<string, List<string>>(){
-                    {"Email", new List<string>(){"test2@ldap.net", "test2-alias@ldap.net"}},
+                    {"Email", new List<string>(){"test2@example.com", "test2-alias@example.com"}},
                     {"Role", new List<string>(){"Employee"}},
                 },
             },
             new User{
-                Cn = "cn=test3,dc=ldap,dc=net",
+                Cn = "cn=test3,dc=example,dc=com",
                 Attributes = new Dictionary<string, List<string>>(){
-                    {"Email", new List<string>(){"test3@ldap.net"}},
+                    {"Email", new List<string>(){"test3@example.com"}},
                 },
             },
             new User{
-                Cn = "cn=benutzer4,dc=ldap,dc=net",
+                Cn = "cn=benutzer4,dc=example,dc=com",
                 Attributes = new Dictionary<string, List<string>>(){
-                    {"Email", new List<string>(){"benutzer4@ldap.net"}},
+                    {"Email", new List<string>(){"benutzer4@example.com"}},
                 },
             },
         };
