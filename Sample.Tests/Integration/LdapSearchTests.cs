@@ -7,20 +7,8 @@ using Xunit;
 
 namespace Sample.Tests.Integration
 {
-    public class LdapSearchTests
+    public class LdapSearchTests : IClassFixture<LdapServerFixture>
     {
-        private void StartServer()
-        {
-            Thread.Sleep(1000);
-
-            Sample.Program program = new Sample.Program();
-            new Thread(async () =>
-            {
-                Thread.CurrentThread.IsBackground = true;
-                await Sample.Program.Main(new string[0]);
-            }).Start();
-        }
-
         private string ExecuteLdapSearch(string search)
         {
             string arguments = "-w test -H ldap://localhost:3389 -b \"dc=example,dc=com\" -D \"cn=Manager,dc=example,dc=com\" " + search;
@@ -46,10 +34,8 @@ namespace Sample.Tests.Integration
         }
 
         [Fact]
-        public void TestSimpleEqualSearch()
+        public void TestSimpleEqualCnSearch()
         {
-            StartServer();
-
             string output = ExecuteLdapSearch("\"cn=test1\"");
             string expected = @"# extended LDIF
 #
@@ -61,8 +47,37 @@ namespace Sample.Tests.Integration
 
 # test1, example.com
 dn: cn=test1,dc=example,dc=com
-Email: test1@example.com
-Role: Administrator
+email: test1@example.com
+role: Administrator
+
+# search result
+search: 2
+result: 0 Success
+
+# numResponses: 2
+# numEntries: 1
+".Replace("\r", "");
+
+            Assert.Equal(expected, output);
+        }
+
+        [Fact]
+        public void TestSimpleEqualAttributeSearch()
+        {
+            string output = ExecuteLdapSearch("\"(email=test2-alias@example.com)\"");
+            string expected = @"# extended LDIF
+#
+# LDAPv3
+# base <dc=example,dc=com> with scope subtree
+# filter: (email=test2-alias@example.com)
+# requesting: ALL
+#
+
+# test2, example.com
+dn: cn=test2,dc=example,dc=com
+email: test2@example.com
+email: test2-alias@example.com
+role: Employee
 
 # search result
 search: 2
