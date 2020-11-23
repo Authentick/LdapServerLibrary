@@ -21,6 +21,7 @@ namespace Gatekeeper.LdapServerLibrary.Models.Operations.Response
         {
             Success = 0,
             OperationsError = 1,
+            ProtocolError = 2,
             InappropriateAuthentication = 48,
             InvalidCredentials = 49,
         }

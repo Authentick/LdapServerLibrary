@@ -91,5 +91,52 @@ result: 0 Success
 
             Assert.Equal(expected, output);
         }
+
+
+        [Fact]
+        public void TestPresenceObjectClassSearch()
+        {
+            string output = ExecuteLdapSearch("\"(objectClass=*)\"");
+            string expected = @"# extended LDIF
+#
+# LDAPv3
+# base <dc=example,dc=com> with scope subtree
+# filter: (objectClass=*)
+# requesting: ALL
+#
+
+# test1, example.com
+dn: cn=test1,dc=example,dc=com
+email: test1@example.com
+role: Administrator
+objectClass: inetOrgPerson
+
+# test2, example.com
+dn: cn=test2,dc=example,dc=com
+email: test2@example.com
+email: test2-alias@example.com
+role: Employee
+objectClass: inetOrgPerson
+
+# test3, example.com
+dn: cn=test3,dc=example,dc=com
+email: test3@example.com
+objectClass: inetOrgPerson
+
+# benutzer4, example.com
+dn: cn=benutzer4,dc=example,dc=com
+email: benutzer4@example.com
+objectClass: inetOrgPerson
+
+# search result
+search: 2
+result: 0 Success
+
+# numResponses: 5
+# numEntries: 4
+".Replace("\r", "");
+
+            Assert.Equal(expected, output);
+        }
     }
 }

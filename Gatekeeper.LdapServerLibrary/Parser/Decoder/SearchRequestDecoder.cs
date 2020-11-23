@@ -68,7 +68,7 @@ namespace Gatekeeper.LdapServerLibrary.Parser.Decoder
                 case 6:
                     return DecodeAttributeValueAssertionFilter<LessOrEqualFilter>(reader);
                 case 7:
-                    return new PresentFilter { Value = System.Text.Encoding.ASCII.GetString(reader.ReadOctetString()) };
+                    return new PresentFilter { Value = System.Text.Encoding.ASCII.GetString(reader.ReadOctetString(new Asn1Tag(TagClass.ContextSpecific, reader.PeekTag().TagValue))) };
                 case 8:
                     return DecodeAttributeValueAssertionFilter<ApproxMatchFilter>(reader);
                 default:

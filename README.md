@@ -6,6 +6,8 @@ This is a work-in-progress LDAP server library written in C#.
 
 - BindRequest
 - UnbindRequest
+- SearchRequest
+- ExtendedRequest
 
 ## Get via NuGet
 
