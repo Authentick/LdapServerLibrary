@@ -26,6 +26,7 @@ namespace Gatekeeper.LdapServerLibrary.Engine
             List<Type> publicOperations = new List<Type>{
                 typeof(BindRequest),
                 typeof(UnbindRequest),
+                typeof(ExtendedRequest),
             };
             if (!_clientContext.IsAuthenticated && !publicOperations.Contains(message.ProtocolOp.GetType()))
             {

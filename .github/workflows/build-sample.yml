@@ -19,3 +19,7 @@ jobs:
         dotnet-version: 5.0.100
     - name: Build
       run: dotnet build --configuration Release Sample/Sample.csproj
+    - name: Install ldapsearch
+      run: sudo apt-get update && sudo apt-get -y install ldap-utils
+    - name: Test
+      run: dotnet test Sample.Tests/

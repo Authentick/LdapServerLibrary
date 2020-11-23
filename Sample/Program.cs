@@ -3,13 +3,16 @@ using Gatekeeper.LdapServerLibrary;
 
 namespace Sample
 {
-    class Program
+    public class Program
     {
-        static async Task Main(string[] args)
+        public static async Task Main(string[] args)
         {
-          LdapServer server = new LdapServer();
-          server.RegisterEventListener(new LdapEventListener());
-          await server.Start();
+            LdapServer server = new LdapServer
+            {
+                Port = 3389,
+            };
+            server.RegisterEventListener(new LdapEventListener());
+            await server.Start();
         }
     }
 }

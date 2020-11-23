@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Gatekeeper.LdapServerLibrary;
 using Gatekeeper.LdapServerLibrary.Session.Events;
@@ -10,8 +13,12 @@ namespace Sample
     {
         public override Task<bool> OnAuthenticationRequest(ClientContext context, AuthenticationEvent authenticationEvent)
         {
-            if (authenticationEvent.Username == "cn=Manager,dc=ldap,dc=net" && authenticationEvent.Password == "test")
+            if (authenticationEvent.Username == "cn=Manager,dc=example,dc=com" && authenticationEvent.Password == "test")
             {
+                return Task.FromResult(true);
+            }
+
+            if(authenticationEvent.Password == "test") {
                 return Task.FromResult(true);
             }
 
@@ -20,22 +27,37 @@ namespace Sample
 
         public override Task<List<SearchResultReply>> OnSearchRequest(ClientContext context, SearchEvent searchEvent)
         {
+            int? limit = searchEvent.SizeLimit;
+
+            // Load the user database that queries will be executed against
+            UserDatabase dbContainer = new UserDatabase();
+            IQueryable<UserDatabase.User> userDb = dbContainer.GetUserDatabase().AsQueryable();
+
+            var itemExpression = Expression.Parameter(typeof(UserDatabase.User));
+            SearchExpressionBuilder searchExpressionBuilder = new SearchExpressionBuilder(searchEvent);
+            var conditions = searchExpressionBuilder.Build(searchEvent.Filter, itemExpression);
+            var queryLambda = Expression.Lambda<Func<UserDatabase.User, bool>>(conditions, itemExpression);
+            var predicate = queryLambda.Compile();
+
+            var results = userDb.Where(predicate).ToList();
+
             List<SearchResultReply> replies = new List<SearchResultReply>();
+            foreach (UserDatabase.User user in results)
+            {
+                List<SearchResultReply.Attribute> attributes = new List<SearchResultReply.Attribute>();
+                SearchResultReply reply = new SearchResultReply(
+                    user.Cn,
+                    attributes
+                );
 
-
-            SearchResultReply reply1 = new SearchResultReply(
-                "cn=test,dc=ldap,dc=net",
-                new List<SearchResultReply.Attribute>()
-            );
-            SearchResultReply reply2 = new SearchResultReply(
-                "cn=test1,dc=ldap,dc=net",
-                new List<SearchResultReply.Attribute>{
-                    new SearchResultReply.Attribute("Email", new List<string>{"bar@bar.com", "foo@foo.com"})
+                foreach (KeyValuePair<string, List<string>> attribute in user.Attributes)
+                {
+                    SearchResultReply.Attribute attributeClass = new SearchResultReply.Attribute(attribute.Key, attribute.Value);
+                    attributes.Add(attributeClass);
                 }
-            );
 
-            replies.Add(reply1);
-            replies.Add(reply2);
+                replies.Add(reply);
+            }
 
             return Task.FromResult(replies);
         }
