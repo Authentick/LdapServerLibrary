@@ -30,7 +30,8 @@ namespace Sample
             IQueryable<UserDatabase.User> userDb = dbContainer.GetUserDatabase().AsQueryable();
 
             var itemExpression = Expression.Parameter(typeof(UserDatabase.User));
-            var conditions = SearchExpressionBuilder.Build(searchEvent.Filter, itemExpression);
+            SearchExpressionBuilder searchExpressionBuilder = new SearchExpressionBuilder(searchEvent);
+            var conditions = searchExpressionBuilder.Build(searchEvent.Filter, itemExpression);
             var queryLambda = Expression.Lambda<Func<UserDatabase.User, bool>>(conditions, itemExpression);
             var predicate = queryLambda.Compile();
 

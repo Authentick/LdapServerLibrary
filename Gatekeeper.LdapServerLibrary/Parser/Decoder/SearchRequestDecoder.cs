@@ -11,17 +11,17 @@ namespace Gatekeeper.LdapServerLibrary.Parser.Decoder
     {
         public SearchRequest TryDecode(AsnReader reader)
         {
+            SearchRequest searchRequest = new SearchRequest();
+
             Asn1Tag bindRequestApplication = new Asn1Tag(TagClass.Application, 3);
             AsnReader subReader = reader.ReadSequence(bindRequestApplication);
-
-            string baseDn = System.Text.Encoding.ASCII.GetString(subReader.ReadOctetString());
+            searchRequest.BaseObject = System.Text.Encoding.ASCII.GetString(subReader.ReadOctetString());
             SearchRequest.ScopeEnum scope = subReader.ReadEnumeratedValue<SearchRequest.ScopeEnum>();
             SearchRequest.DerefAliasesEnum deref = subReader.ReadEnumeratedValue<SearchRequest.DerefAliasesEnum>();
             BigInteger sizeLimit = subReader.ReadInteger();
             BigInteger timeLimit = subReader.ReadInteger();
             bool typesOnly = subReader.ReadBoolean();
 
-            SearchRequest searchRequest = new SearchRequest();
             searchRequest.Filter = DecodeSearchFilter(subReader);
 
             //            subReader.ThrowIfNotEmpty();

@@ -14,6 +14,7 @@ namespace Gatekeeper.LdapServerLibrary.Engine.Handler
         {
             SearchEvent searchEvent = new SearchEvent{
                 Filter = operation.Filter,
+                BaseObject = operation.BaseObject,
             };
             List<SearchResultReply> replies = await eventListener.OnSearchRequest(new ClientContext(), searchEvent);
 
@@ -25,7 +26,9 @@ namespace Gatekeeper.LdapServerLibrary.Engine.Handler
                 opReply.Add(entry);
             }
 
-            LdapResult ldapResult = new LdapResult(LdapResult.ResultCodeEnum.Success, null, null);
+            var resultCode = (replies.Count > 0) ? LdapResult.ResultCodeEnum.Success : LdapResult.ResultCodeEnum.NoSuchObject;
+
+            LdapResult ldapResult = new LdapResult(resultCode, null, null);
             SearchResultDone searchResultDone = new SearchResultDone(ldapResult);
             opReply.Add(searchResultDone);
 

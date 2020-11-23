@@ -15,6 +15,7 @@ namespace Gatekeeper.LdapServerLibrary.Models.Operations.Request
         }
 
         internal IFilterChoice Filter = null!;
+        internal string BaseObject = null!;
 
         internal enum ScopeEnum
         {

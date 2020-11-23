@@ -3,13 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Gatekeeper.LdapServerLibrary.Session.Events;
 using static Gatekeeper.LdapServerLibrary.Session.Events.SearchEvent;
 
 namespace Sample
 {
     internal class SearchExpressionBuilder
     {
-        public static Expression Build(IFilterChoice filter, Expression itemExpression)
+        private readonly SearchEvent _searchEvent;
+
+        public SearchExpressionBuilder(SearchEvent searchEvent)
+        {
+            _searchEvent = searchEvent;
+        }
+
+        public Expression Build(IFilterChoice filter, Expression itemExpression)
         {
             switch (filter)
             {
@@ -26,16 +34,20 @@ namespace Sample
             }
         }
 
-        private static Expression BuildOrFilter(OrFilter filter, Expression itemExpression)
+        private Expression BuildOrFilter(OrFilter filter, Expression itemExpression)
         {
             List<Expression> expressions = new List<Expression>();
 
             Expression orFilterExpr = null;
-            foreach(IFilterChoice subFilter in filter.Filters) {
+            foreach (IFilterChoice subFilter in filter.Filters)
+            {
                 Expression subExpr = Build(subFilter, itemExpression);
-                if(orFilterExpr == null) {
+                if (orFilterExpr == null)
+                {
                     orFilterExpr = subExpr;
-                } else {
+                }
+                else
+                {
                     orFilterExpr = Expression.Or(orFilterExpr, subExpr);
                 }
             }
@@ -43,16 +55,20 @@ namespace Sample
             return orFilterExpr;
         }
 
-        private static Expression BuildAndFilter(AndFilter filter, Expression itemExpression)
+        private Expression BuildAndFilter(AndFilter filter, Expression itemExpression)
         {
             List<Expression> expressions = new List<Expression>();
 
             Expression andFilterExpr = null;
-            foreach(IFilterChoice subFilter in filter.Filters) {
+            foreach (IFilterChoice subFilter in filter.Filters)
+            {
                 Expression subExpr = Build(subFilter, itemExpression);
-                if(andFilterExpr == null) {
+                if (andFilterExpr == null)
+                {
                     andFilterExpr = subExpr;
-                } else {
+                }
+                else
+                {
                     andFilterExpr = Expression.And(andFilterExpr, subExpr);
                 }
             }
@@ -60,20 +76,21 @@ namespace Sample
             return andFilterExpr;
         }
 
-        private static Expression BuildPresentFilter(PresentFilter filter, Expression itemExpression)
+        private Expression BuildPresentFilter(PresentFilter filter, Expression itemExpression)
         {
             Expression attributeExpr = Expression.Property(itemExpression, "Attributes");
-            Expression attributeContainsKey = Expression.Call(attributeExpr, typeof(Dictionary<string, List<string>>).GetMethod("ContainsKey", new Type[] { typeof(string) }), Expression.Constant(filter.Value));
-            
+            Expression attributeContainsKey = Expression.Call(attributeExpr, typeof(Dictionary<string, List<string>>).GetMethod("ContainsKey", new Type[] { typeof(string) }), Expression.Constant(filter.Value.ToLower()));
+
             return attributeContainsKey;
         }
 
-        private static Expression BuildEqualityFilter(EqualityMatchFilter filter, Expression itemExpression)
+        private Expression BuildEqualityFilter(EqualityMatchFilter filter, Expression itemExpression)
         {
             if (filter.AttributeDesc == "cn")
             {
                 Expression left = Expression.Property(itemExpression, "Cn");
-                Expression right = Expression.Constant("cn=" + filter.AssertionValue + ",dc=example,dc=com");
+                string baseObj = (_searchEvent.BaseObject == "") ? "" : "," + _searchEvent.BaseObject;
+                Expression right = Expression.Constant("cn=" + filter.AssertionValue + baseObj);
                 return Expression.Equal(left, right);
             }
             else
@@ -85,7 +102,7 @@ namespace Sample
 
                 // (a.Key == attributeName)
                 Expression subExprLeftAttributeName = Expression.Property(keyValuePair, "Key");
-                Expression subExprRightAttributeName = Expression.Constant(filter.AttributeDesc);
+                Expression subExprRightAttributeName = Expression.Constant(filter.AttributeDesc.ToLower());
                 Expression subExprAttributeName = Expression.Equal(subExprLeftAttributeName, subExprRightAttributeName);
 
                 // a.Value.Contains(attributeValue) 
