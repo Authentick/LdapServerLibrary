@@ -7,7 +7,12 @@ namespace Sample.Tests.Integration
     {
         private string ExecuteLdapSearch(string search)
         {
-            string arguments = "-w test -H ldap://localhost:3389 -b \"dc=example,dc=com\" -D \"cn=Manager,dc=example,dc=com\" " + search;
+            return ExecuteLdapSearch(search, "dc=example,dc=com");
+        }
+
+        private string ExecuteLdapSearch(string search, string baseDn)
+        {
+            string arguments = "-w test -H ldap://localhost:3389 -b \"" + baseDn + "\" -D \"cn=Manager,dc=example,dc=com\" " + search;
             ProcessStartInfo startInfo = new ProcessStartInfo()
             {
                 FileName = "/usr/bin/ldapsearch",
@@ -328,6 +333,36 @@ result: 0 Success
 
 # numResponses: 4
 # numEntries: 3
+".Replace("\r", "");
+
+            Assert.Equal(expected, output);
+        }
+
+        [Fact]
+        public void TestSingleSearchWithStrictBaseDn()
+        {
+            string output = ExecuteLdapSearch("\"(objectClass=*)\"", "cn=benutzer4,dc=example,dc=com");
+            string expected = @"# extended LDIF
+#
+# LDAPv3
+# base <cn=benutzer4,dc=example,dc=com> with scope subtree
+# filter: (objectClass=*)
+# requesting: ALL
+#
+
+# benutzer4, example.com
+dn: cn=benutzer4,dc=example,dc=com
+email: benutzer4@example.com
+objectclass: inetOrgPerson
+displayname: Benutzer 4
+uid: test4
+
+# search result
+search: 2
+result: 0 Success
+
+# numResponses: 2
+# numEntries: 1
 ".Replace("\r", "");
 
             Assert.Equal(expected, output);

@@ -20,21 +20,54 @@ namespace Sample
 
         public Expression Build(IFilterChoice filter, Expression itemExpression)
         {
+
+            Expression? filterExpr = null;
             switch (filter)
             {
                 case AndFilter af:
-                    return BuildAndFilter(af, itemExpression);
+                    filterExpr = BuildAndFilter(af, itemExpression);
+                    break;
                 case OrFilter of:
-                    return BuildOrFilter(of, itemExpression);
+                    filterExpr = BuildOrFilter(of, itemExpression);
+                    break;
                 case PresentFilter pf:
-                    return BuildPresentFilter(pf, itemExpression);
+                    filterExpr = BuildPresentFilter(pf, itemExpression);
+                    break;
                 case EqualityMatchFilter eq:
-                    return BuildEqualityFilter(eq, itemExpression);
+                    filterExpr = BuildEqualityFilter(eq, itemExpression);
+                    break;
                 case SubstringFilter sf:
-                    return BuildSubstringFilter(sf, itemExpression);
+                    filterExpr = BuildSubstringFilter(sf, itemExpression);
+                    break;
                 default:
                     throw new NotImplementedException("Filter for " + filter.GetType() + " is not implemented");
             }
+
+            return BuildWithBaseFilter(filterExpr, itemExpression);
+        }
+
+        private Expression BuildWithBaseFilter(Expression filterExpr, Expression itemExpr)
+        {
+            if (_searchEvent.BaseObject == "")
+            {
+                return filterExpr;
+            }
+            else if (_searchEvent.BaseObject.StartsWith("dc="))
+            {
+                MemberExpression cnExpr = Expression.Property(itemExpr, "Cn");
+                MethodCallExpression valueExprEndsWith = Expression.Call(cnExpr, typeof(string).GetMethod("EndsWith", new Type[] { typeof(string) }), Expression.Constant(_searchEvent.BaseObject));
+
+                return Expression.And(valueExprEndsWith, filterExpr);
+            }
+            else
+            {
+                MemberExpression left = Expression.Property(itemExpr, "Cn");
+                ConstantExpression right = Expression.Constant(_searchEvent.BaseObject);
+                BinaryExpression equalExpr = Expression.Equal(left, right);
+
+                return Expression.And(equalExpr, filterExpr);
+            }
+
         }
 
         private Expression BuildOrFilter(OrFilter filter, Expression itemExpression)
@@ -148,7 +181,7 @@ namespace Sample
                 var regexLambda = Expression.Lambda<Func<string, bool>>(regexMatchExpr, regexStringList);
 
                 // a.Value.Any(rsl => regex.IsMatch(rsl))
-                Expression subExprValue = Expression.Property(keyValuePair, "Value"); 
+                Expression subExprValue = Expression.Property(keyValuePair, "Value");
                 MethodInfo regexAnyMethodInfo = typeof(Enumerable).GetMethods(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).First(m => m.Name == "Any" && m.GetParameters().Count() == 2).MakeGenericMethod(typeof(string));
                 MethodCallExpression regexAnyCallExpr = Expression.Call(regexAnyMethodInfo, subExprValue, regexLambda);
 
