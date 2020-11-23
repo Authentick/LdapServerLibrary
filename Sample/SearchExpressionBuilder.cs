@@ -13,6 +13,10 @@ namespace Sample
         {
             switch (filter)
             {
+                case AndFilter af:
+                    return BuildAndFilter(af, itemExpression);
+                case OrFilter of:
+                    return BuildOrFilter(of, itemExpression);
                 case PresentFilter pf:
                     return BuildPresentFilter(pf, itemExpression);
                 case EqualityMatchFilter eq:
@@ -20,6 +24,40 @@ namespace Sample
                 default:
                     throw new NotImplementedException("Filter for " + filter.GetType() + " is not implemented");
             }
+        }
+
+        private static Expression BuildOrFilter(OrFilter filter, Expression itemExpression)
+        {
+            List<Expression> expressions = new List<Expression>();
+
+            Expression orFilterExpr = null;
+            foreach(IFilterChoice subFilter in filter.Filters) {
+                Expression subExpr = Build(subFilter, itemExpression);
+                if(orFilterExpr == null) {
+                    orFilterExpr = subExpr;
+                } else {
+                    orFilterExpr = Expression.Or(orFilterExpr, subExpr);
+                }
+            }
+
+            return orFilterExpr;
+        }
+
+        private static Expression BuildAndFilter(AndFilter filter, Expression itemExpression)
+        {
+            List<Expression> expressions = new List<Expression>();
+
+            Expression andFilterExpr = null;
+            foreach(IFilterChoice subFilter in filter.Filters) {
+                Expression subExpr = Build(subFilter, itemExpression);
+                if(andFilterExpr == null) {
+                    andFilterExpr = subExpr;
+                } else {
+                    andFilterExpr = Expression.And(andFilterExpr, subExpr);
+                }
+            }
+
+            return andFilterExpr;
         }
 
         private static Expression BuildPresentFilter(PresentFilter filter, Expression itemExpression)
@@ -60,8 +98,8 @@ namespace Sample
                 // {a => ((a.Key == attributeName) And a.Value.Contains(attributeValue))}
                 var lambda = Expression.Lambda<Func<KeyValuePair<string, List<string>>, bool>>(attributeExprMatch, keyValuePair);
 
-                MethodInfo allMethod = typeof(Enumerable).GetMethods(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).First(m => m.Name == "Any" && m.GetParameters().Count() == 2).MakeGenericMethod(typeof(KeyValuePair<string, List<string>>));
-                return Expression.Call(allMethod, attributeExpr, lambda);
+                MethodInfo anyMethod = typeof(Enumerable).GetMethods(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).First(m => m.Name == "Any" && m.GetParameters().Count() == 2).MakeGenericMethod(typeof(KeyValuePair<string, List<string>>));
+                return Expression.Call(anyMethod, attributeExpr, lambda);
             }
         }
     }
