@@ -49,6 +49,7 @@ namespace Sample.Tests.Integration
 dn: cn=test1,dc=example,dc=com
 email: test1@example.com
 role: Administrator
+objectClass: inetOrgPerson
 
 # search result
 search: 2
@@ -78,6 +79,7 @@ dn: cn=test2,dc=example,dc=com
 email: test2@example.com
 email: test2-alias@example.com
 role: Employee
+objectClass: inetOrgPerson
 
 # search result
 search: 2
