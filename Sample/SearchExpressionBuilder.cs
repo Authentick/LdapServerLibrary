@@ -129,8 +129,42 @@ namespace Sample
             }
             else
             {
-                // TODO
-                throw new NotImplementedException("Not implemented");
+                Expression attributeExpr = Expression.Property(itemExpression, "Attributes");
+
+                // Pair to search for
+                ParameterExpression keyValuePair = Expression.Parameter(typeof(KeyValuePair<string, List<string>>), "a");
+
+                // rsl
+                ParameterExpression regexStringList = Expression.Parameter(typeof(string), "rsl");
+
+                // regex.IsMatch(rsl)
+                Regex regex = new Regex("^" + suppliedRegex + "$", RegexOptions.Compiled);
+                ConstantExpression regexConst = Expression.Constant(regex);
+                MethodInfo methodInfo = typeof(Regex).GetMethod("IsMatch", new Type[] { typeof(string) });
+                Expression[] callExprs = new Expression[] { regexStringList };
+                MethodCallExpression regexMatchExpr = Expression.Call(regexConst, methodInfo, callExprs);
+
+                // {rsl => regex.IsMatch(rsl)}
+                var regexLambda = Expression.Lambda<Func<string, bool>>(regexMatchExpr, regexStringList);
+
+                // a.Value.Any(rsl => regex.IsMatch(rsl))
+                Expression subExprValue = Expression.Property(keyValuePair, "Value"); 
+                MethodInfo regexAnyMethodInfo = typeof(Enumerable).GetMethods(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).First(m => m.Name == "Any" && m.GetParameters().Count() == 2).MakeGenericMethod(typeof(string));
+                MethodCallExpression regexAnyCallExpr = Expression.Call(regexAnyMethodInfo, subExprValue, regexLambda);
+
+                // (a.Key == attributeName)
+                Expression subExprLeftAttributeName = Expression.Property(keyValuePair, "Key");
+                Expression subExprRightAttributeName = Expression.Constant(filter.AttributeDesc.ToLower());
+                Expression subExprAttributeName = Expression.Equal(subExprLeftAttributeName, subExprRightAttributeName);
+
+                // ((a.Key == attributeName) && a.Value.Any(rsl => regex.IsMatch(rsl)))
+                Expression attributeExprMatch = Expression.And(subExprAttributeName, regexAnyCallExpr);
+
+                // {a => ((a.Key == attributeName) And a.Value.Any(rsl => regex.IsMatch(rsl)))}
+                var lambda = Expression.Lambda<Func<KeyValuePair<string, List<string>>, bool>>(attributeExprMatch, keyValuePair);
+
+                MethodInfo anyMethod = typeof(Enumerable).GetMethods(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).First(m => m.Name == "Any" && m.GetParameters().Count() == 2).MakeGenericMethod(typeof(KeyValuePair<string, List<string>>));
+                return Expression.Call(anyMethod, attributeExpr, lambda);
             }
         }
 
