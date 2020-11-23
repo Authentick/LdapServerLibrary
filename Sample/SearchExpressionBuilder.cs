@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Gatekeeper.LdapServerLibrary.Session.Events;
 using static Gatekeeper.LdapServerLibrary.Session.Events.SearchEvent;
 
@@ -29,6 +30,8 @@ namespace Sample
                     return BuildPresentFilter(pf, itemExpression);
                 case EqualityMatchFilter eq:
                     return BuildEqualityFilter(eq, itemExpression);
+                case SubstringFilter sf:
+                    return BuildSubstringFilter(sf, itemExpression);
                 default:
                     throw new NotImplementedException("Filter for " + filter.GetType() + " is not implemented");
             }
@@ -82,6 +85,53 @@ namespace Sample
             Expression attributeContainsKey = Expression.Call(attributeExpr, typeof(Dictionary<string, List<string>>).GetMethod("ContainsKey", new Type[] { typeof(string) }), Expression.Constant(filter.Value.ToLower()));
 
             return attributeContainsKey;
+        }
+
+        private Expression BuildSubstringFilter(SubstringFilter filter, Expression itemExpression)
+        {
+            string suppliedRegex = "";
+
+            if (filter.Initial != null)
+            {
+                suppliedRegex = Regex.Escape(filter.Initial);
+            }
+            else
+            {
+                suppliedRegex = ".*";
+            }
+
+            foreach (string anyString in filter.Any)
+            {
+                suppliedRegex = suppliedRegex + ".*" + Regex.Escape(anyString) + ".*";
+            }
+
+            if (filter.Final != null)
+            {
+                suppliedRegex = suppliedRegex + Regex.Escape(filter.Final);
+            }
+            else
+            {
+                suppliedRegex = suppliedRegex + ".*";
+            }
+
+            if (filter.AttributeDesc == "cn")
+            {
+                MemberExpression cnProperty = Expression.Property(itemExpression, "Cn");
+                string baseObj = (_searchEvent.BaseObject == "") ? "" : "," + _searchEvent.BaseObject;
+
+                Regex regex = new Regex("^cn=" + suppliedRegex + Regex.Escape(baseObj) + "$", RegexOptions.Compiled);
+                ConstantExpression regexConst = Expression.Constant(regex);
+
+                MethodInfo methodInfo = typeof(Regex).GetMethod("IsMatch", new Type[] { typeof(string) });
+                Expression[] callExprs = new Expression[] { cnProperty };
+
+                return Expression.Call(regexConst, methodInfo, callExprs);
+            }
+            else
+            {
+                // TODO
+                throw new NotImplementedException("Not implemented");
+            }
         }
 
         private Expression BuildEqualityFilter(EqualityMatchFilter filter, Expression itemExpression)

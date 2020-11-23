@@ -47,9 +47,9 @@ namespace Gatekeeper.LdapServerLibrary.Session.Events
         public class EqualityMatchFilter : AttributeValueAssertionFilter { }
         public class SubstringFilter : IFilterChoice
         {
-            public string? Type;
+            public string AttributeDesc = null!;
             public string? Initial;
-            public List<string>? Any;
+            public List<string> Any = new List<string>();
             public string? Final;
         }
         public class GreaterOrEqualFilter : AttributeValueAssertionFilter { }

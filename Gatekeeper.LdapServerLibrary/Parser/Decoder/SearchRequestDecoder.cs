@@ -51,6 +51,37 @@ namespace Gatekeeper.LdapServerLibrary.Parser.Decoder
             return filters;
         }
 
+        private SubstringFilter DecodeSubstringFilter(AsnReader reader)
+        {
+            AsnReader subReader = reader.ReadSequence(new Asn1Tag(TagClass.ContextSpecific, 4));
+
+            string attributeDescription = System.Text.Encoding.ASCII.GetString(subReader.ReadOctetString());
+
+            SubstringFilter filter = new SubstringFilter
+            {
+                AttributeDesc = attributeDescription,
+            };
+
+            AsnReader substringSequenceReader = subReader.ReadSequence();
+            while (substringSequenceReader.HasData)
+            {
+                switch (substringSequenceReader.PeekTag().TagValue)
+                {
+                    case 0:
+                        filter.Initial = System.Text.Encoding.ASCII.GetString(substringSequenceReader.ReadOctetString(new Asn1Tag(TagClass.ContextSpecific, 0)));
+                        break;
+                    case 1:
+                        filter.Any.Add(System.Text.Encoding.ASCII.GetString(substringSequenceReader.ReadOctetString(new Asn1Tag(TagClass.ContextSpecific, 1))));
+                        break;
+                    case 2:
+                        filter.Final = System.Text.Encoding.ASCII.GetString(substringSequenceReader.ReadOctetString(new Asn1Tag(TagClass.ContextSpecific, 2)));
+                        break;
+                }
+            }
+
+            return filter;
+        }
+
         private IFilterChoice DecodeSearchFilter(AsnReader reader)
         {
             switch (reader.PeekTag().TagValue)
@@ -63,6 +94,8 @@ namespace Gatekeeper.LdapServerLibrary.Parser.Decoder
                     return new NotFilter { Filter = DecodeSearchFilter(reader) };
                 case 3:
                     return DecodeAttributeValueAssertionFilter<EqualityMatchFilter>(reader);
+                case 4:
+                    return DecodeSubstringFilter(reader);
                 case 5:
                     return DecodeAttributeValueAssertionFilter<GreaterOrEqualFilter>(reader);
                 case 6:
@@ -75,6 +108,5 @@ namespace Gatekeeper.LdapServerLibrary.Parser.Decoder
                     throw new NotImplementedException("Cannot decode the tag: " + reader.PeekTag().TagValue);
             }
         }
-
     }
 }

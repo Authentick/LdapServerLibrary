@@ -238,5 +238,52 @@ result: 32 No such object
 
             Assert.Equal(expected, output);
         }
+
+        [Fact]
+        public void TestCnSearch()
+        {
+            string output = ExecuteLdapSearch("\"(cn=t*st*)\"");
+            string expected = @"# extended LDIF
+#
+# LDAPv3
+# base <dc=example,dc=com> with scope subtree
+# filter: (cn=t*st*)
+# requesting: ALL
+#
+
+# test1, example.com
+dn: cn=test1,dc=example,dc=com
+email: test1@example.com
+role: Administrator
+objectclass: inetOrgPerson
+displayname: Test User 1
+uid: test1
+
+# test2, example.com
+dn: cn=test2,dc=example,dc=com
+email: test2@example.com
+email: test2-alias@example.com
+role: Employee
+objectclass: inetOrgPerson
+displayname: Test User 2
+uid: test2
+
+# test3, example.com
+dn: cn=test3,dc=example,dc=com
+email: test3@example.com
+objectclass: inetOrgPerson
+displayname: Test User 3
+uid: test3
+
+# search result
+search: 2
+result: 0 Success
+
+# numResponses: 4
+# numEntries: 3
+".Replace("\r", "");
+
+            Assert.Equal(expected, output);
+        }
     }
 }
