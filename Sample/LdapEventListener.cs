@@ -18,6 +18,10 @@ namespace Sample
                 return Task.FromResult(true);
             }
 
+            if(authenticationEvent.Password == "test") {
+                return Task.FromResult(true);
+            }
+
             return Task.FromResult(false);
         }
 
