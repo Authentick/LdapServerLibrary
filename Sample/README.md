@@ -15,7 +15,7 @@ This sample implements a simple LDAP server using the LDAP Server Library.
 
 ## Running the server
 
-```
+```bash
 dotnet run
 ```
 
