@@ -10,7 +10,7 @@ namespace Gatekeeper.LdapServerLibrary.Engine.Handler
         Task<HandlerReply> IRequestHandler<UnbindRequest>.Handle(ClientContext context, LdapEvents eventListener, UnbindRequest operation)
         {
             context.IsAuthenticated = false;
-            context.UserId = null;
+            context.Rdn = new Dictionary<string, List<string>>();
             return Task.FromResult(new HandlerReply(new List<IProtocolOp> { }));
         }
     }
