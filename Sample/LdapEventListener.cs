@@ -46,7 +46,7 @@ namespace Sample
             {
                 List<SearchResultReply.Attribute> attributes = new List<SearchResultReply.Attribute>();
                 SearchResultReply reply = new SearchResultReply(
-                    user.Cn,
+                    user.Dn,
                     attributes
                 );
 

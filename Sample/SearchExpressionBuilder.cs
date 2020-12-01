@@ -54,14 +54,14 @@ namespace Sample
             }
             else if (_searchEvent.BaseObject.StartsWith("dc="))
             {
-                MemberExpression cnExpr = Expression.Property(itemExpr, "Cn");
-                MethodCallExpression valueExprEndsWith = Expression.Call(cnExpr, typeof(string).GetMethod("EndsWith", new Type[] { typeof(string) }), Expression.Constant(_searchEvent.BaseObject));
+                MemberExpression dnExpr = Expression.Property(itemExpr, "Dn");
+                MethodCallExpression valueExprEndsWith = Expression.Call(dnExpr, typeof(string).GetMethod("EndsWith", new Type[] { typeof(string) }), Expression.Constant(_searchEvent.BaseObject));
 
                 return Expression.And(valueExprEndsWith, filterExpr);
             }
             else
             {
-                MemberExpression left = Expression.Property(itemExpr, "Cn");
+                MemberExpression left = Expression.Property(itemExpr, "Dn");
                 ConstantExpression right = Expression.Constant(_searchEvent.BaseObject);
                 BinaryExpression equalExpr = Expression.Equal(left, right);
 
@@ -149,14 +149,14 @@ namespace Sample
 
             if (filter.AttributeDesc == "cn")
             {
-                MemberExpression cnProperty = Expression.Property(itemExpression, "Cn");
+                MemberExpression dnProperty = Expression.Property(itemExpression, "Dn");
                 string baseObj = (_searchEvent.BaseObject == "") ? "" : "," + _searchEvent.BaseObject;
 
                 Regex regex = new Regex("^cn=" + suppliedRegex + Regex.Escape(baseObj) + "$", RegexOptions.Compiled);
                 ConstantExpression regexConst = Expression.Constant(regex);
 
                 MethodInfo methodInfo = typeof(Regex).GetMethod("IsMatch", new Type[] { typeof(string) });
-                Expression[] callExprs = new Expression[] { cnProperty };
+                Expression[] callExprs = new Expression[] { dnProperty };
 
                 return Expression.Call(regexConst, methodInfo, callExprs);
             }
@@ -205,7 +205,7 @@ namespace Sample
         {
             if (filter.AttributeDesc == "cn")
             {
-                Expression left = Expression.Property(itemExpression, "Cn");
+                Expression left = Expression.Property(itemExpression, "Dn");
                 string baseObj = (_searchEvent.BaseObject == "") ? "" : "," + _searchEvent.BaseObject;
                 Expression right = Expression.Constant("cn=" + filter.AssertionValue + baseObj);
                 return Expression.Equal(left, right);
