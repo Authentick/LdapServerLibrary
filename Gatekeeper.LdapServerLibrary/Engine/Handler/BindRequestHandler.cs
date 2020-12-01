@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Gatekeeper.LdapServerLibrary.Models.Operations;
 using Gatekeeper.LdapServerLibrary.Models.Operations.Request;
 using Gatekeeper.LdapServerLibrary.Models.Operations.Response;
+using Gatekeeper.LdapServerLibrary.Parser;
 using Gatekeeper.LdapServerLibrary.Session.Events;
 
 namespace Gatekeeper.LdapServerLibrary.Engine.Handler
@@ -17,7 +18,7 @@ namespace Gatekeeper.LdapServerLibrary.Engine.Handler
             if (success)
             {
                 context.IsAuthenticated = true;
-                context.UserId = operation.Name;
+                context.Rdn = RdnParser.ParseRdnString(operation.Name);
 
                 LdapResult ldapResult = new LdapResult(LdapResult.ResultCodeEnum.Success, null, null);
                 BindResponse bindResponse = new BindResponse(ldapResult);
@@ -26,7 +27,7 @@ namespace Gatekeeper.LdapServerLibrary.Engine.Handler
             else
             {
                 context.IsAuthenticated = false;
-                context.UserId = null;
+                context.Rdn = new Dictionary<string, List<string>>();
 
                 LdapResult ldapResult = new LdapResult(LdapResult.ResultCodeEnum.InappropriateAuthentication, null, null);
                 BindResponse bindResponse = new BindResponse(ldapResult);
