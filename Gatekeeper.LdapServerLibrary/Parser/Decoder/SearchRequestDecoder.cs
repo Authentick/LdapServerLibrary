@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Formats.Asn1;
 using System.Numerics;
 using Gatekeeper.LdapServerLibrary.Models.Operations.Request;
-using static Gatekeeper.LdapServerLibrary.Session.Events.SearchEvent;
+using static Gatekeeper.LdapServerLibrary.Session.Events.ISearchEvent;
 
 namespace Gatekeeper.LdapServerLibrary.Parser.Decoder
 {
@@ -23,8 +23,6 @@ namespace Gatekeeper.LdapServerLibrary.Parser.Decoder
             bool typesOnly = subReader.ReadBoolean();
 
             searchRequest.Filter = DecodeSearchFilter(subReader);
-
-            //            subReader.ThrowIfNotEmpty();
 
             return searchRequest;
         }

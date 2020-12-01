@@ -11,21 +11,22 @@ namespace Sample
 {
     class LdapEventListener : LdapEvents
     {
-        public override Task<bool> OnAuthenticationRequest(ClientContext context, AuthenticationEvent authenticationEvent)
+        public override Task<bool> OnAuthenticationRequest(ClientContext context, IAuthenticationEvent authenticationEvent)
         {
-            if (authenticationEvent.Username == "cn=Manager,dc=example,dc=com" && authenticationEvent.Password == "test")
-            {
-                return Task.FromResult(true);
-            }
+            List<string> cnValue = null;
+            authenticationEvent.Rdn.TryGetValue("cn", out cnValue);
+            List<string> dcValue = null;
+            authenticationEvent.Rdn.TryGetValue("dc", out dcValue);
 
-            if(authenticationEvent.Password == "test") {
+            if (cnValue.Contains("Manager") && dcValue.Contains("example") && dcValue.Contains("com"))
+            {
                 return Task.FromResult(true);
             }
 
             return Task.FromResult(false);
         }
 
-        public override Task<List<SearchResultReply>> OnSearchRequest(ClientContext context, SearchEvent searchEvent)
+        public override Task<List<SearchResultReply>> OnSearchRequest(ClientContext context, ISearchEvent searchEvent)
         {
             int? limit = searchEvent.SizeLimit;
 

@@ -12,13 +12,14 @@ namespace Gatekeeper.LdapServerLibrary.Engine.Handler
     {
         async Task<HandlerReply> IRequestHandler<BindRequest>.Handle(ClientContext context, LdapEvents eventListener, BindRequest operation)
         {
-            AuthenticationEvent authEvent = new AuthenticationEvent(operation.Name, operation.Authentication);
+            Dictionary<string, List<string>> rdn = RdnParser.ParseRdnString(operation.Name);
+            AuthenticationEvent authEvent = new AuthenticationEvent(rdn, operation.Authentication);
             bool success = await eventListener.OnAuthenticationRequest(new ClientContext(), authEvent);
 
             if (success)
             {
                 context.IsAuthenticated = true;
-                context.Rdn = RdnParser.ParseRdnString(operation.Name);
+                context.Rdn = rdn;
 
                 LdapResult ldapResult = new LdapResult(LdapResult.ResultCodeEnum.Success, null, null);
                 BindResponse bindResponse = new BindResponse(ldapResult);

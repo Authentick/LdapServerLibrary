@@ -1,4 +1,4 @@
-using static Gatekeeper.LdapServerLibrary.Session.Events.SearchEvent;
+using static Gatekeeper.LdapServerLibrary.Session.Events.ISearchEvent;
 
 namespace Gatekeeper.LdapServerLibrary.Models.Operations.Request
 {

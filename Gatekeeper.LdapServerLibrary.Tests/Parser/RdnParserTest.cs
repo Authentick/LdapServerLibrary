@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 using Xunit;
 using Gatekeeper.LdapServerLibrary.Parser;
 
-namespace Gatekeeper.LdapServerLibrary.Tests
+namespace Gatekeeper.LdapServerLibrary.Tests.Parser
 {
     public class RdnParserTest
     {
