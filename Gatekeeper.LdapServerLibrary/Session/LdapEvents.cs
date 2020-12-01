@@ -13,7 +13,7 @@ namespace Gatekeeper.LdapServerLibrary
         /// <param name="context"></param>
         /// <param name="authenticationEvent"></param>
         /// <returns>Whether the authentication should succeed or not</returns>
-        public virtual Task<bool> OnAuthenticationRequest(ClientContext context, AuthenticationEvent authenticationEvent)
+        public virtual Task<bool> OnAuthenticationRequest(ClientContext context, IAuthenticationEvent authenticationEvent)
         {
             return Task.FromResult(false);
         }
@@ -24,7 +24,7 @@ namespace Gatekeeper.LdapServerLibrary
         /// <param name="context"></param>
         /// <param name="searchEvent"></param>
         /// <returns>List of search replies</returns>
-        public virtual Task<List<SearchResultReply>> OnSearchRequest(ClientContext context, SearchEvent searchEvent)
+        public virtual Task<List<SearchResultReply>> OnSearchRequest(ClientContext context, ISearchEvent searchEvent)
         {
             return Task.FromResult(new List<SearchResultReply>());
         }

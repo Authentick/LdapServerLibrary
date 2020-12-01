@@ -5,15 +5,15 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Gatekeeper.LdapServerLibrary.Session.Events;
-using static Gatekeeper.LdapServerLibrary.Session.Events.SearchEvent;
+using static Gatekeeper.LdapServerLibrary.Session.Events.ISearchEvent;
 
 namespace Sample
 {
     internal class SearchExpressionBuilder
     {
-        private readonly SearchEvent _searchEvent;
+        private readonly ISearchEvent _searchEvent;
 
-        public SearchExpressionBuilder(SearchEvent searchEvent)
+        public SearchExpressionBuilder(ISearchEvent searchEvent)
         {
             _searchEvent = searchEvent;
         }

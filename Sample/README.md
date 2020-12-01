@@ -15,8 +15,8 @@ This sample implements a simple LDAP server using the LDAP Server Library.
 
 ## Running the server
 
-```
+```bash
 dotnet run
 ```
 
-The server will then listen on port 389.
+The server will then listen on port 3389.

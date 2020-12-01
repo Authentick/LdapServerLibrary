@@ -1,16 +1,18 @@
+using System.Collections.Generic;
+
 namespace Gatekeeper.LdapServerLibrary.Session.Events
 {
-    public class AuthenticationEvent
+    internal class AuthenticationEvent : IAuthenticationEvent
     {
-        public readonly string Username;
-        public readonly string Password;
+        public Dictionary<string, List<string>> Rdn { get; }
+        public string Password { get; }
 
         public AuthenticationEvent(
-            string username,
+            Dictionary<string, List<string>> rdn,
             string password
             )
         {
-            Username = username;
+            Rdn = rdn;
             Password = password;
         }
     }
