@@ -5,7 +5,7 @@ updates:
   schedule:
     interval: "daily"
 - package-ecosystem: nuget	
-  directory: "/Gatekeeper.LdapServerLibrary"
+  directory: "/Gatekeeper.LdapServerLibrary.Tests"
   schedule:	
     interval: daily	
   open-pull-requests-limit: 10	
