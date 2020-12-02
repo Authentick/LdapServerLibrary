@@ -22,12 +22,21 @@ namespace Sample
             {
                 return Task.FromResult(true);
             }
+            else if (cnValue.Contains("OnlyBindUser") && authenticationEvent.Password == "OnlyBindUserPassword")
+            {
+                return Task.FromResult(true);
+            }
 
             return Task.FromResult(false);
         }
 
         public override Task<List<SearchResultReply>> OnSearchRequest(ClientContext context, ISearchEvent searchEvent)
         {
+            if (context.Rdn["cn"][0] == "OnlyBindUser")
+            {
+                return Task.FromResult(new List<SearchResultReply>());
+            }
+
             int? limit = searchEvent.SizeLimit;
 
             // Load the user database that queries will be executed against
