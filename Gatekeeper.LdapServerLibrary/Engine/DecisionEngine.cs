@@ -8,6 +8,7 @@ using Gatekeeper.LdapServerLibrary.Engine.Handler;
 using Gatekeeper.LdapServerLibrary.Models;
 using Gatekeeper.LdapServerLibrary.Models.Operations;
 using Gatekeeper.LdapServerLibrary.Models.Operations.Request;
+using Gatekeeper.LdapServerLibrary.Models.Operations.Response;
 
 namespace Gatekeeper.LdapServerLibrary.Engine
 {
@@ -30,7 +31,9 @@ namespace Gatekeeper.LdapServerLibrary.Engine
             };
             if (!_clientContext.IsAuthenticated && !publicOperations.Contains(message.ProtocolOp.GetType()))
             {
-                throw new Exception("User is not authenticated");
+                return new List<LdapMessage>(){
+                    new LdapMessage(message.MessageId, new BindResponse(new LdapResult(LdapResult.ResultCodeEnum.InappropriateAuthentication, null, null)))
+                };
             }
 
             LdapEvents eventListener = SingletonContainer.GetLdapEventListener();
@@ -71,4 +74,3 @@ namespace Gatekeeper.LdapServerLibrary.Engine
         }
     }
 }
-

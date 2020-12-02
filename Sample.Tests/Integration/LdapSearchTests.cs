@@ -12,7 +12,26 @@ namespace Sample.Tests.Integration
 
         private string ExecuteLdapSearch(string search, string baseDn)
         {
-            string arguments = "-w test -H ldap://localhost:3389 -b \"" + baseDn + "\" -D \"cn=Manager,dc=example,dc=com\" " + search;
+            return ExecuteLdapSearch(search, baseDn, "cn=Manager,dc=example,dc=com", "ValidManagerPassword");
+        }
+
+        private string ExecuteLdapSearch(string search, string baseDn, string bindUser, string password)
+        {
+            string arguments = "";
+
+            if (password != null)
+            {
+                arguments += "-w " + password + " ";
+            }
+
+            arguments += "-H ldap://localhost:3389 -b \"" + baseDn + "\" ";
+
+            if (bindUser != null)
+            {
+                arguments += "-D \"" + bindUser + "\" ";
+            }
+            arguments += search;
+
             ProcessStartInfo startInfo = new ProcessStartInfo()
             {
                 FileName = "/usr/bin/ldapsearch",
@@ -363,6 +382,48 @@ result: 0 Success
 
 # numResponses: 2
 # numEntries: 1
+".Replace("\r", "");
+
+            Assert.Equal(expected, output);
+        }
+
+        [Fact]
+        public void TestSingleSearchWithUserThatIsNotAllowedToBind()
+        {
+            string output = ExecuteLdapSearch("\"(objectClass=*)\"", "cn=benutzer4,dc=example,dc=com", "cn=OnlyBindUser", "OnlyBindUserPassword");
+            string expected = @"# extended LDIF
+#
+# LDAPv3
+# base <cn=benutzer4,dc=example,dc=com> with scope subtree
+# filter: (objectClass=*)
+# requesting: ALL
+#
+
+# search result
+search: 2
+result: 32 No such object
+
+# numResponses: 1
+".Replace("\r", "");
+
+            Assert.Equal(expected, output);
+        }
+
+        [Fact]
+        public void TestSearchWithInvalidPassword()
+        {
+            string output = ExecuteLdapSearch("\"(objectClass=*)\"", "cn=benutzer4,dc=example,dc=com", "cn=OnlyBindUser", "NotACorrectBindUserPassword");
+            string expected = @"ldap_bind: Inappropriate authentication (48)
+".Replace("\r", "");
+
+            Assert.Equal(expected, output);
+        }
+
+        [Fact]
+        public void TestSearchWithoutPasswordAndBindUser()
+        {
+            string output = ExecuteLdapSearch("\"(objectClass=*)\"", "cn=benutzer4,dc=example,dc=com", null, null);
+            string expected = @"ldap_sasl_interactive_bind_s: Inappropriate authentication (48)
 ".Replace("\r", "");
 
             Assert.Equal(expected, output);

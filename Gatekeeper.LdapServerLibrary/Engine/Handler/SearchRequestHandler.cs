@@ -17,7 +17,7 @@ namespace Gatekeeper.LdapServerLibrary.Engine.Handler
                 Filter = operation.Filter,
                 BaseObject = operation.BaseObject,
             };
-            List<SearchResultReply> replies = await eventListener.OnSearchRequest(new ClientContext(), searchEvent);
+            List<SearchResultReply> replies = await eventListener.OnSearchRequest(context, searchEvent);
 
             List<IProtocolOp> opReply = new List<IProtocolOp>();
 

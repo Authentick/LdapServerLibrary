@@ -4,8 +4,6 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Gatekeeper.LdapServerLibrary.Engine;
 using Gatekeeper.LdapServerLibrary.Models;
-using Gatekeeper.LdapServerLibrary.Models.Operations.Request;
-using Gatekeeper.LdapServerLibrary.Models.Operations.Response;
 using Gatekeeper.LdapServerLibrary.Parser;
 
 namespace Gatekeeper.LdapServerLibrary.Network
@@ -42,7 +40,8 @@ namespace Gatekeeper.LdapServerLibrary.Network
                     LdapMessage message = parser.TryParsePacket(bytes);
 
                     List<LdapMessage> replies = await engine.GenerateReply(message);
-                    foreach(LdapMessage outMsg in replies) {
+                    foreach (LdapMessage outMsg in replies)
+                    {
                         byte[] msg = parser.TryEncodePacket(outMsg);
                         stream.Write(msg, 0, msg.Length);
                     }
