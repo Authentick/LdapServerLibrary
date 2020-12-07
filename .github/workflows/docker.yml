@@ -18,7 +18,7 @@ jobs:
       -
         name: Docker meta
         id: docker_meta
-        uses: crazy-max/ghaction-docker-meta@v1.8.5
+        uses: crazy-max/ghaction-docker-meta@v1.9.0
         with:
           images: ghcr.io/lukasreschke/ldapserver-dev
           tag-sha: true
