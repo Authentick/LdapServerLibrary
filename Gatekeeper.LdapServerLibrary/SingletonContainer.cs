@@ -8,6 +8,17 @@ namespace Gatekeeper.LdapServerLibrary
         private static LdapEvents LdapEventListener = new LdapEvents();
         private static OperationMapper OperationMapper = new OperationMapper();
         private static HandlerMapper HandlerMapper = new HandlerMapper();
+        private static ILogger? Logger;
+
+        static internal void SetLogger(ILogger logger)
+        {
+            Logger = logger;
+        }
+
+        static internal ILogger? GetLogger()
+        {
+            return Logger;
+        }
 
         static internal void SetLdapEventListener(LdapEvents listener)
         {

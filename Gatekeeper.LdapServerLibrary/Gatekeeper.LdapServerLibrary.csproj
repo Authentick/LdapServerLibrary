@@ -3,7 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <Version>0.0.4-alpha</Version>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Version>0.0.5-alpha</Version>
     <Authors>Lukas Reschke</Authors>
     <Company>Gatekeeper</Company>
     <Description>
@@ -14,9 +16,7 @@
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/GetGatekeeper/LdapServerLibrary</PackageProjectUrl>
     <RepositoryUrl>https://github.com/GetGatekeeper/LdapServerLibrary.git</RepositoryUrl>
-    <PackageReleaseNotes>
-      Expose ClientContext to SearchRequestHandler.
-    </PackageReleaseNotes>
+    <PackageReleaseNotes>Expose exceptions via ILogger</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
     <Title>Gatekeeper.LdapServerLibrary</Title>
   </PropertyGroup>

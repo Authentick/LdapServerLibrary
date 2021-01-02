@@ -6,13 +6,13 @@ namespace Gatekeeper.LdapServerLibrary.Network
 {
     internal class ConnectionManager
     {
-        private Dictionary<Guid, ClientSession> _clients = new Dictionary<Guid, ClientSession>();
+        private List<ClientSession> _clients = new List<ClientSession>();
 
         internal void AddClient(TcpClient client)
         {
             Guid id = Guid.NewGuid();
-            ClientSession session = new ClientSession(id, client);
-            _clients.Add(id, session);
+            ClientSession session = new ClientSession(client);
+            _clients.Add(session);
             session.StartReceiving();
         }
     }

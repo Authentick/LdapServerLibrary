@@ -10,12 +10,10 @@ namespace Gatekeeper.LdapServerLibrary.Network
 {
     internal class ClientSession
     {
-        internal readonly Guid Id;
         internal readonly TcpClient Client;
 
-        internal ClientSession(Guid id, TcpClient client)
+        internal ClientSession(TcpClient client)
         {
-            Id = id;
             Client = client;
         }
 
@@ -36,20 +34,33 @@ namespace Gatekeeper.LdapServerLibrary.Network
                 // Loop to receive all the data sent by the client.
                 while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
                 {
-                    PacketParser parser = new PacketParser();
-                    LdapMessage message = parser.TryParsePacket(bytes);
-
-                    List<LdapMessage> replies = await engine.GenerateReply(message);
-                    foreach (LdapMessage outMsg in replies)
+                    try
                     {
-                        byte[] msg = parser.TryEncodePacket(outMsg);
-                        stream.Write(msg, 0, msg.Length);
+                        PacketParser parser = new PacketParser();
+                        LdapMessage message = parser.TryParsePacket(bytes);
+
+                        List<LdapMessage> replies = await engine.GenerateReply(message);
+                        foreach (LdapMessage outMsg in replies)
+                        {
+                            byte[] msg = parser.TryEncodePacket(outMsg);
+                            stream.Write(msg, 0, msg.Length);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        ILogger? logger = SingletonContainer.GetLogger();
+                        if (logger != null)
+                        {
+                            logger.LogException(e);
+                        }
+
+                        Client.Close();
+                        break;
                     }
                 }
             });
 
             networkTask.Start();
-
         }
     }
 }

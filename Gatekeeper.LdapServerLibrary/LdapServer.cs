@@ -12,6 +12,11 @@ namespace Gatekeeper.LdapServerLibrary
             SingletonContainer.SetLdapEventListener(ldapEvents);
         }
 
+        public void RegisterLogger(ILogger logger) 
+        {
+            SingletonContainer.SetLogger(logger);
+        }
+
         public async Task Start()
         {
             ConnectionManager manager = new ConnectionManager();
