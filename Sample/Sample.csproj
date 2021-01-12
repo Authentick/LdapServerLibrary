@@ -14,4 +14,8 @@
     <Watch Include="..\Gatekeeper.LdapServerLibrary/*.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="example_certificate.pfx" />
+  </ItemGroup>
+
 </Project>

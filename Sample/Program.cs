@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Gatekeeper.LdapServerLibrary;
 
@@ -14,8 +15,19 @@ namespace Sample
             };
             server.RegisterEventListener(new LdapEventListener());
             server.RegisterLogger(new ConsoleLogger());
-            server.RegisterCertificate(new X509Certificate2("/root/workspace/LdapServerLibrary/Sample/example_certificate.pfx"));
+            server.RegisterCertificate(new X509Certificate2(GetTlsCertificatePath()));
             await server.Start();
+        }
+
+        private static string GetTlsCertificatePath()
+        {
+            var certificateStream = System.Reflection.Assembly.GetAssembly(typeof(Sample.Program)).GetManifestResourceStream("Sample.example_certificate.pfx");
+            string path = Path.GetTempFileName();
+            var fileStream = File.Create(path);
+            certificateStream.Seek(0, SeekOrigin.Begin);
+            certificateStream.CopyTo(fileStream);
+            fileStream.Close();
+            return path;
         }
     }
 }
