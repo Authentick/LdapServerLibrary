@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Gatekeeper.LdapServerLibrary.Network;
 
@@ -15,6 +16,11 @@ namespace Gatekeeper.LdapServerLibrary
         public void RegisterLogger(ILogger logger) 
         {
             SingletonContainer.SetLogger(logger);
+        }
+
+        public void RegisterCertificate(X509Certificate2 certificate)
+        {
+            SingletonContainer.SetCertificate(certificate);
         }
 
         public async Task Start()

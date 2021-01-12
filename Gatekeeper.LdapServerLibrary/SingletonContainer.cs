@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using Gatekeeper.LdapServerLibrary.Engine;
 using Gatekeeper.LdapServerLibrary.Parser;
 
@@ -9,6 +10,7 @@ namespace Gatekeeper.LdapServerLibrary
         private static OperationMapper OperationMapper = new OperationMapper();
         private static HandlerMapper HandlerMapper = new HandlerMapper();
         private static ILogger? Logger;
+        private static X509Certificate2? Certificate;
 
         static internal void SetLogger(ILogger logger)
         {
@@ -28,6 +30,16 @@ namespace Gatekeeper.LdapServerLibrary
         static internal LdapEvents GetLdapEventListener()
         {
             return LdapEventListener;
+        }
+
+        static internal void SetCertificate(X509Certificate2 certificate)
+        {
+            Certificate = certificate;
+        }
+
+        static internal X509Certificate? GetCertificate()
+        {
+            return Certificate;
         }
 
         static internal OperationMapper GetOperationMapper()

@@ -50,7 +50,32 @@ namespace Sample.Tests.Integration
                 return error;
             }
 
-            return p.StandardOutput.ReadToEnd();
+            startInfo = new ProcessStartInfo()
+            {
+                FileName = "/usr/bin/ldapsearch",
+                Arguments = arguments + " -ZZ",
+                RedirectStandardError = true,
+                RedirectStandardOutput = true,
+            };
+            startInfo.EnvironmentVariables.Add("LDAPTLS_REQCERT", "never");
+
+            Process tlsProcess = new Process { StartInfo = startInfo };
+            tlsProcess.Start();
+            tlsProcess.WaitForExit();
+
+            error = tlsProcess.StandardError.ReadToEnd();
+            if (error != "")
+            {
+                return error;
+            }
+
+            string standardOut = p.StandardOutput.ReadToEnd();
+            string tlsStandardOut = tlsProcess.StandardOutput.ReadToEnd();
+
+
+            Assert.Equal(standardOut.Replace("\nsearch: 2\n", "\nsearch: 3\n"), tlsStandardOut);
+
+            return standardOut;
         }
 
         [Fact]

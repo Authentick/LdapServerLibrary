@@ -14,7 +14,7 @@ namespace Gatekeeper.LdapServerLibrary.Engine.Handler
         {
             Dictionary<string, List<string>> rdn = RdnParser.ParseRdnString(operation.Name);
             AuthenticationEvent authEvent = new AuthenticationEvent(rdn, operation.Authentication);
-            bool success = await eventListener.OnAuthenticationRequest(new ClientContext(), authEvent);
+            bool success = await eventListener.OnAuthenticationRequest(context, authEvent);
 
             if (success)
             {
