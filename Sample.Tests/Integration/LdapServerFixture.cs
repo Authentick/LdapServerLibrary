@@ -11,14 +11,13 @@ namespace Sample.Tests.Integration
 
         private void StartServer()
         {
-            Thread.Sleep(1000);
-
             Sample.Program program = new Sample.Program();
             new Thread(async () =>
             {
                 Thread.CurrentThread.IsBackground = true;
                 await Sample.Program.Main(new string[0]);
             }).Start();
+            Thread.Sleep(1000);
         }
     }
 }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Gatekeeper.LdapServerLibrary.Models.Operations;
 using Gatekeeper.LdapServerLibrary.Models.Operations.Request;
+using Gatekeeper.LdapServerLibrary.Models.Operations.Response;
 
 namespace Gatekeeper.LdapServerLibrary.Engine.Handler
 {
@@ -11,7 +12,9 @@ namespace Gatekeeper.LdapServerLibrary.Engine.Handler
         {
             context.IsAuthenticated = false;
             context.Rdn = new Dictionary<string, List<string>>();
-            return Task.FromResult(new HandlerReply(new List<IProtocolOp> { }));
+            return Task.FromResult(new HandlerReply(new List<IProtocolOp> {
+                new UnbindDummyResponse()
+            }));
         }
     }
 }

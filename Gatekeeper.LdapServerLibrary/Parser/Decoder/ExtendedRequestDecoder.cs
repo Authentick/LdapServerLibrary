@@ -7,7 +7,22 @@ namespace Gatekeeper.LdapServerLibrary.Parser.Decoder
     {
         public ExtendedRequest TryDecode(AsnReader reader)
         {
-            return new ExtendedRequest();
+            Asn1Tag bindRequestApplication = new Asn1Tag(TagClass.Application, 23);
+            AsnReader subReader = reader.ReadSequence(bindRequestApplication);
+            Asn1Tag contextTag = new Asn1Tag(TagClass.ContextSpecific, 0);
+
+            string requestName = System.Text.Encoding.ASCII.GetString(subReader.ReadOctetString(contextTag));
+            string? requestValue = null;
+            if (subReader.HasData)
+            {
+                requestValue = System.Text.Encoding.ASCII.GetString(subReader.ReadOctetString(contextTag));
+            }
+
+            return new ExtendedRequest
+            {
+                RequestName = requestName,
+                RequestValue = requestValue,
+            };
         }
     }
 }
