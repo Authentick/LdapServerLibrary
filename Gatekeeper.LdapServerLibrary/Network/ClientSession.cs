@@ -40,17 +40,18 @@ namespace Gatekeeper.LdapServerLibrary.Network
                 while (_clientIsConnected)
                 {
                     Stream rawOrSslStream = (_useStartTls) ? sslStream : unencryptedStream;
-                    if (_useStartTls && !_initializedTls)
-                    {
-                        await sslStream.AuthenticateAsServerAsync(new SslServerAuthenticationOptions
-                        {
-                            ServerCertificate = SingletonContainer.GetCertificate(),
-                        });
-                        _initializedTls = true;
-                    }
 
                     try
                     {
+                        if (_useStartTls && !_initializedTls)
+                        {
+                            await sslStream.AuthenticateAsServerAsync(new SslServerAuthenticationOptions
+                            {
+                                ServerCertificate = SingletonContainer.GetCertificate(),
+                            });
+                            _initializedTls = true;
+                        }
+
                         rawOrSslStream.Read(bytes, 0, bytes.Length);
                         await HandleAsync(bytes, rawOrSslStream, engine);
                     }
@@ -80,7 +81,7 @@ namespace Gatekeeper.LdapServerLibrary.Network
             List<LdapMessage> replies = await engine.GenerateReply(message);
             foreach (LdapMessage outMsg in replies)
             {
-                if(outMsg.ProtocolOp.GetType() == typeof(Gatekeeper.LdapServerLibrary.Models.Operations.Response.UnbindDummyResponse))
+                if (outMsg.ProtocolOp.GetType() == typeof(Gatekeeper.LdapServerLibrary.Models.Operations.Response.UnbindDummyResponse))
                 {
                     _clientIsConnected = false;
                     break;
@@ -91,7 +92,7 @@ namespace Gatekeeper.LdapServerLibrary.Network
                 if (outMsg.ProtocolOp.GetType() == typeof(Gatekeeper.LdapServerLibrary.Models.Operations.Response.ExtendedOperationResponse))
                 {
                     var response = ((Gatekeeper.LdapServerLibrary.Models.Operations.Response.ExtendedOperationResponse)outMsg.ProtocolOp);
-                    if (response.ResponseName == ExtendedRequestHandler.StartTLS) 
+                    if (response.ResponseName == ExtendedRequestHandler.StartTLS)
                     {
                         _useStartTls = true;
                     }
