@@ -12,8 +12,8 @@ namespace Gatekeeper.LdapServerLibrary.Engine.Handler
         {
             context.IsAuthenticated = false;
             context.Rdn = new Dictionary<string, List<string>>();
-            return Task.FromResult(new HandlerReply(new List<IProtocolOp> { 
-                new UnbindDummyResponse() 
+            return Task.FromResult(new HandlerReply(new List<IProtocolOp> {
+                new UnbindDummyResponse()
             }));
         }
     }

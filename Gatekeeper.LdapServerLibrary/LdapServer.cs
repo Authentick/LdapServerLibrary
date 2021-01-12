@@ -13,7 +13,7 @@ namespace Gatekeeper.LdapServerLibrary
             SingletonContainer.SetLdapEventListener(ldapEvents);
         }
 
-        public void RegisterLogger(ILogger logger) 
+        public void RegisterLogger(ILogger logger)
         {
             SingletonContainer.SetLogger(logger);
         }

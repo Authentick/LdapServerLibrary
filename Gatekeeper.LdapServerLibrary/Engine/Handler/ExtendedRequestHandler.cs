@@ -13,13 +13,13 @@ namespace Gatekeeper.LdapServerLibrary.Engine.Handler
 
         async Task<HandlerReply> IRequestHandler<ExtendedRequest>.Handle(ClientContext context, LdapEvents eventListener, ExtendedRequest operation)
         {
-            if(operation.RequestName == StartTLS && SingletonContainer.GetCertificate() != null)
+            if (operation.RequestName == StartTLS && SingletonContainer.GetCertificate() != null)
             {
                 context.HasEncryptedConnection = true;
                 return new HandlerReply(new List<IProtocolOp>{
                     new ExtendedOperationResponse(
                         new LdapResult(LdapResult.ResultCodeEnum.Success, null, null),
-                        StartTLS, 
+                        StartTLS,
                         null
                     ),
                 });
