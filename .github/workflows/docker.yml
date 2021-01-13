@@ -20,7 +20,7 @@ jobs:
         id: docker_meta
         uses: crazy-max/ghaction-docker-meta@v1.11.0
         with:
-          images: ghcr.io/lukasreschke/ldapserver-dev
+          images: ghcr.io/getgatekeeper/ldapserver-dev
           tag-sha: true
       -
         name: Set up QEMU
