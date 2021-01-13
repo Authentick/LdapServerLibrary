@@ -1,7 +1,7 @@
 version: '3'
 services:
   ldapserver:
-      image: ghcr.io/lukasreschke/ldapserver-dev:sha-2b9cc27
+      image: ghcr.io/getgatekeeper/ldapserver-dev:sha-583a956
       volumes:
         - .:/workspace:cached
         - /var/run/docker.sock:/var/run/docker-host.sock
