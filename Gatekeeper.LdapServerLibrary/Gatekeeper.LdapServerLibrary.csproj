@@ -21,4 +21,8 @@
     <Title>Gatekeeper.LdapServerLibrary</Title>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Gatekeeper.LdapServerLibrary.PacketParser\Gatekeeper.LdapServerLibrary.PacketParser.csproj" />
+  </ItemGroup>
+
 </Project>

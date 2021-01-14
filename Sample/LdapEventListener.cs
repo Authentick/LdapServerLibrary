@@ -32,12 +32,13 @@ namespace Sample
 
         public override Task<List<SearchResultReply>> OnSearchRequest(ClientContext context, ISearchEvent searchEvent)
         {
+            System.Console.WriteLine(System.Convert.ToBase64String(searchEvent.SearchRequest.RawPacket));
             if (context.Rdn["cn"][0] == "OnlyBindUser")
             {
                 return Task.FromResult(new List<SearchResultReply>());
             }
 
-            int? limit = searchEvent.SizeLimit;
+            int? limit = searchEvent.SearchRequest.SizeLimit;
 
             // Load the user database that queries will be executed against
             UserDatabase dbContainer = new UserDatabase();
@@ -45,7 +46,7 @@ namespace Sample
 
             var itemExpression = Expression.Parameter(typeof(UserDatabase.User));
             SearchExpressionBuilder searchExpressionBuilder = new SearchExpressionBuilder(searchEvent);
-            var conditions = searchExpressionBuilder.Build(searchEvent.Filter, itemExpression);
+            var conditions = searchExpressionBuilder.Build(searchEvent.SearchRequest.Filter, itemExpression);
             var queryLambda = Expression.Lambda<Func<UserDatabase.User, bool>>(conditions, itemExpression);
             var predicate = queryLambda.Compile();
 

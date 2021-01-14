@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Gatekeeper.LdapServerLibrary.Models.Operations;
-using Gatekeeper.LdapServerLibrary.Models.Operations.Request;
 using Gatekeeper.LdapServerLibrary.Models.Operations.Response;
+using Gatekeeper.LdapServerLibrary.PacketParser.Models.Operations.Request;
 using Gatekeeper.LdapServerLibrary.Session.Events;
 using Gatekeeper.LdapServerLibrary.Session.Replies;
 
@@ -14,8 +14,7 @@ namespace Gatekeeper.LdapServerLibrary.Engine.Handler
         {
             SearchEvent searchEvent = new SearchEvent
             {
-                Filter = operation.Filter,
-                BaseObject = operation.BaseObject,
+                SearchRequest = operation,
             };
             List<SearchResultReply> replies = await eventListener.OnSearchRequest(context, searchEvent);
 

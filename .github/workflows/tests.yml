@@ -25,6 +25,8 @@ jobs:
       run: dotnet test Sample.Tests/ --collect:"XPlat Code Coverage" -r TestResults/
     - name: Test Gatekeeper.LdapServerLibrary.Tests
       run: dotnet test Gatekeeper.LdapServerLibrary.Tests/ --collect:"XPlat Code Coverage" -r TestResults/
+    - name: Test Gatekeeper.LdapServerLibrary.PacketParser.Tests
+      run: dotnet test Gatekeeper.LdapServerLibrary.PacketParser.Tests/ --collect:"XPlat Code Coverage" -r TestResults/
     - uses: codecov/codecov-action@v1
       with:
         directory: TestResults/

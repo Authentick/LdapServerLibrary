@@ -9,9 +9,12 @@ namespace Gatekeeper.LdapServerLibrary.PacketParser.Decoder
 {
     internal class SearchRequestDecoder : IApplicationDecoder<SearchRequest>
     {
-        public SearchRequest TryDecode(AsnReader reader)
+        public SearchRequest TryDecode(AsnReader reader, byte[] input)
         {
-            SearchRequest searchRequest = new SearchRequest();
+            SearchRequest searchRequest = new SearchRequest
+            {
+                RawPacket = input,
+            };
 
             Asn1Tag bindRequestApplication = new Asn1Tag(TagClass.Application, 3);
             AsnReader subReader = reader.ReadSequence(bindRequestApplication);

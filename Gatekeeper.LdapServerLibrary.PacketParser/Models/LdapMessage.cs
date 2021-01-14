@@ -8,7 +8,7 @@ namespace Gatekeeper.LdapServerLibrary.PacketParser.Models
         public readonly BigInteger MessageId;
         public readonly IProtocolOp ProtocolOp;
 
-        internal LdapMessage(
+        public LdapMessage(
             BigInteger messageId,
             IProtocolOp protocolOp
             )

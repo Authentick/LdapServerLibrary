@@ -1,39 +1,34 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using Gatekeeper.LdapServerLibrary.Engine.Handler;
+using Gatekeeper.LdapServerLibrary.PacketParser.Models.Operations.Request;
 
 namespace Gatekeeper.LdapServerLibrary.Engine
 {
     internal class HandlerMapper
     {
-        private Dictionary<Type, Type> HandlerMapperCache = new Dictionary<Type, Type>();
-
-        public HandlerMapper()
+        internal Type GetHandlerForType(Type type)
         {
-            PopulateHandlerMapper();
-        }
-
-        private void PopulateHandlerMapper()
-        {
-            IEnumerable<Type> types = from t in Assembly.GetExecutingAssembly().GetTypes()
-                                      where t.GetInterfaces().Any(i =>
-                                        i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IRequestHandler<>)
-                                      )
-                                      select t;
-
-            types.ToList().ForEach(t =>
+            if (type == typeof(BindRequest))
             {
-                Type operationType = t.GetInterfaces()[0].GenericTypeArguments[0];
+                return typeof(BindRequestHandler);
+            }
 
-                HandlerMapperCache.Add(operationType, t);
-            });
-        }
+            if (type == typeof(ExtendedRequest))
+            {
+                return typeof(ExtendedRequestHandler);
+            }
 
-        internal Type GetHandlerForType(Type t)
-        {
-            return HandlerMapperCache.Single(x => x.Key == t).Value;
+            if (type == typeof(SearchRequest))
+            {
+                return typeof(SearchRequestHandler);
+            }
+
+            if (type == typeof(UnbindRequest))
+            {
+                return typeof(UnbindRequestHandler);
+            }
+
+            throw new NotImplementedException("Type " + type + " is not implemented");
         }
     }
 }

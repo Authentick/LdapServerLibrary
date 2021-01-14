@@ -2,7 +2,7 @@ using Gatekeeper.LdapServerLibrary.PacketParser.Models.Operations;
 
 namespace Gatekeeper.LdapServerLibrary.PacketParser.Models.Operations.Request
 {
-    internal class ExtendedRequest : IProtocolOp
+    public class ExtendedRequest : IProtocolOp
     {
         internal const int Tag = 23;
 

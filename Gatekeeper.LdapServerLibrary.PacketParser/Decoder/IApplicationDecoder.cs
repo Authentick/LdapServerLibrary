@@ -6,6 +6,6 @@ namespace Gatekeeper.LdapServerLibrary.PacketParser.Decoder
 {
     internal interface IApplicationDecoder<T> where T : IProtocolOp
     {
-        T TryDecode(AsnReader reader);
+        T TryDecode(AsnReader reader, byte[] input);
     }
 }

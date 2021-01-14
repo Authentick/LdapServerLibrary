@@ -1,14 +1,13 @@
 using System.Collections.Generic;
-using Gatekeeper.LdapServerLibrary.PacketParser.Models.Operations;
 
 namespace Gatekeeper.LdapServerLibrary.PacketParser.Models.Operations.Request
 {
-    internal class SearchRequest : IProtocolOp
+    public class SearchRequest : IProtocolOp
     {
-        internal const int Tag = 3;
-
-        internal IFilterChoice Filter = null!;
-        internal string BaseObject = null!;
+        public byte[]? RawPacket { get; set; }
+        public const int Tag = 3;
+        public IFilterChoice Filter = null!;
+        public string BaseObject = null!;
         public ScopeEnum Scope { get; set; }
         public DerefAliasesEnum DerefAliases { get; set; }
         public int? SizeLimit { get; set; }

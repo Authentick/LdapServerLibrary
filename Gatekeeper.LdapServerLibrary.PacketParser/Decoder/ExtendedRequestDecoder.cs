@@ -5,7 +5,7 @@ namespace Gatekeeper.LdapServerLibrary.PacketParser.Decoder
 {
     internal class ExtendedRequestDecoder : IApplicationDecoder<ExtendedRequest>
     {
-        public ExtendedRequest TryDecode(AsnReader reader)
+        public ExtendedRequest TryDecode(AsnReader reader, byte[] input)
         {
             Asn1Tag bindRequestApplication = new Asn1Tag(TagClass.Application, 23);
             AsnReader subReader = reader.ReadSequence(bindRequestApplication);

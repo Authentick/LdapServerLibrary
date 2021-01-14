@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Gatekeeper.LdapServerLibrary.Models.Operations;
+using Gatekeeper.LdapServerLibrary.PacketParser.Models.Operations;
 
 namespace Gatekeeper.LdapServerLibrary.Engine.Handler
 {
