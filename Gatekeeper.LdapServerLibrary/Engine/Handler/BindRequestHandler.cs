@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Gatekeeper.LdapServerLibrary.Models.Operations;
 using Gatekeeper.LdapServerLibrary.Models.Operations.Response;
-using Gatekeeper.LdapServerLibrary.PacketParser.Models.Operations.Request;
+using Gatekeeper.LdapPacketParserLibrary.Models.Operations.Request;
 using Gatekeeper.LdapServerLibrary.Parser;
 using Gatekeeper.LdapServerLibrary.Session.Events;
 

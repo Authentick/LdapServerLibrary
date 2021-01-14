@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Gatekeeper.LdapServerLibrary.Session.Events;
-using static Gatekeeper.LdapServerLibrary.PacketParser.Models.Operations.Request.SearchRequest;
+using static Gatekeeper.LdapPacketParserLibrary.Models.Operations.Request.SearchRequest;
 
 namespace Sample
 {

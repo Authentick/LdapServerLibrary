@@ -133,8 +133,8 @@ namespace Gatekeeper.LdapServerLibrary.Network
 
         private async Task HandleAsync(byte[] bytes, Stream stream, DecisionEngine engine)
         {
-            PacketParser.Parser parser = new PacketParser.Parser();
-            PacketParser.Models.LdapMessage message = parser.TryParsePacket(bytes);
+            Gatekeeper.LdapPacketParserLibrary.Parser parser = new Gatekeeper.LdapPacketParserLibrary.Parser();
+            LdapPacketParserLibrary.Models.LdapMessage message = parser.TryParsePacket(bytes);
 
             List<LdapMessage> replies = await engine.GenerateReply(message);
             foreach (LdapMessage outMsg in replies)

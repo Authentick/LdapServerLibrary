@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Gatekeeper.LdapServerLibrary.Engine.Handler;
 using Gatekeeper.LdapServerLibrary.Models;
 using Gatekeeper.LdapServerLibrary.Models.Operations;
-using Gatekeeper.LdapServerLibrary.PacketParser.Models.Operations.Request;
+using Gatekeeper.LdapPacketParserLibrary.Models.Operations.Request;
 using Gatekeeper.LdapServerLibrary.Models.Operations.Response;
 
 namespace Gatekeeper.LdapServerLibrary.Engine
@@ -21,7 +21,7 @@ namespace Gatekeeper.LdapServerLibrary.Engine
             _clientContext = clientContext;
         }
 
-        internal async Task<List<LdapMessage>> GenerateReply(PacketParser.Models.LdapMessage message)
+        internal async Task<List<LdapMessage>> GenerateReply(LdapPacketParserLibrary.Models.LdapMessage message)
         {
             // Authentication check
             List<Type> publicOperations = new List<Type>{

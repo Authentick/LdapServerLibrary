@@ -1,6 +1,6 @@
 using System;
 using Gatekeeper.LdapServerLibrary.Engine.Handler;
-using Gatekeeper.LdapServerLibrary.PacketParser.Models.Operations.Request;
+using Gatekeeper.LdapPacketParserLibrary.Models.Operations.Request;
 
 namespace Gatekeeper.LdapServerLibrary.Engine
 {

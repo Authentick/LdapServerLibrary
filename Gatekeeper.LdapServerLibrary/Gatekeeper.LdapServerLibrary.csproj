@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Version>0.0.7-alpha</Version>
+    <Version>0.0.8-alpha</Version>
     <Authors>Lukas Reschke</Authors>
     <Company>Gatekeeper</Company>
     <Description>
@@ -22,7 +22,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Gatekeeper.LdapServerLibrary.PacketParser\Gatekeeper.LdapServerLibrary.PacketParser.csproj" />
+    <PackageReference Include="Gatekeeper.LdapPacketParserLibrary" Version="0.0.1-alpha" />
   </ItemGroup>
-
 </Project>

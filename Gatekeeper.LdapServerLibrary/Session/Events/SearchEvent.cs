@@ -1,4 +1,4 @@
-using Gatekeeper.LdapServerLibrary.PacketParser.Models.Operations.Request;
+using Gatekeeper.LdapPacketParserLibrary.Models.Operations.Request;
 
 namespace Gatekeeper.LdapServerLibrary.Session.Events
 {
