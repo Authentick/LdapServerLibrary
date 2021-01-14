@@ -16,7 +16,7 @@ namespace Gatekeeper.LdapServerLibrary.Network
         private bool _useStartTls;
         private bool _clientIsConnected = true;
 
-        private const int ASN_LENGTH_INDICATOR = 1; 
+        private const int ASN_LENGTH_INDICATOR = 1;
         private const int ASN_MAX_SINGLE_BYTE_LENGTH = 127;
         private const int ASN_LENGTH_PREFIX_COUNT = 2;
 
