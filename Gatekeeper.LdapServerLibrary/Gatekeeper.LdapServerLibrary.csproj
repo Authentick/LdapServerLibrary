@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Version>0.0.6-alpha</Version>
+    <Version>0.0.7-alpha</Version>
     <Authors>Lukas Reschke</Authors>
     <Company>Gatekeeper</Company>
     <Description>
@@ -16,7 +16,7 @@
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/GetGatekeeper/LdapServerLibrary</PackageProjectUrl>
     <RepositoryUrl>https://github.com/GetGatekeeper/LdapServerLibrary.git</RepositoryUrl>
-    <PackageReleaseNotes>Add support for STARTTLS</PackageReleaseNotes>
+    <PackageReleaseNotes>Extract Packet Parsing</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
     <Title>Gatekeeper.LdapServerLibrary</Title>
   </PropertyGroup>
