@@ -2,16 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Formats.Asn1;
 using System.Numerics;
-using Gatekeeper.LdapServerLibrary.Models.Operations.Request;
-using static Gatekeeper.LdapServerLibrary.Session.Events.ISearchEvent;
+using Gatekeeper.LdapServerLibrary.PacketParser.Models.Operations.Request;
+using static Gatekeeper.LdapServerLibrary.PacketParser.Models.Operations.Request.SearchRequest;
 
-namespace Gatekeeper.LdapServerLibrary.Parser.Decoder
+namespace Gatekeeper.LdapServerLibrary.PacketParser.Decoder
 {
     internal class SearchRequestDecoder : IApplicationDecoder<SearchRequest>
     {
-        public SearchRequest TryDecode(AsnReader reader)
+        public SearchRequest TryDecode(AsnReader reader, byte[] input)
         {
-            SearchRequest searchRequest = new SearchRequest();
+            SearchRequest searchRequest = new SearchRequest
+            {
+                RawPacket = input,
+            };
 
             Asn1Tag bindRequestApplication = new Asn1Tag(TagClass.Application, 3);
             AsnReader subReader = reader.ReadSequence(bindRequestApplication);

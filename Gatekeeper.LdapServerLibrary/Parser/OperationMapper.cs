@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Gatekeeper.LdapServerLibrary.Models.Operations;
-using Gatekeeper.LdapServerLibrary.Parser.Decoder;
 using Gatekeeper.LdapServerLibrary.Parser.Encoder;
 
 namespace Gatekeeper.LdapServerLibrary.Parser
@@ -18,25 +17,7 @@ namespace Gatekeeper.LdapServerLibrary.Parser
         internal OperationMapper()
         {
             PopulateOperationTypeMapper();
-            PopulateDecoderTypeMapper();
             PopulateEncoderTypeMapper();
-        }
-
-        private void PopulateDecoderTypeMapper()
-        {
-            IEnumerable<Type> types = from t in Assembly.GetExecutingAssembly().GetTypes()
-                                      where t.GetInterfaces().Any(i =>
-                                        i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IApplicationDecoder<>)
-                                      )
-                                      select t;
-
-            types.ToList().ForEach(t =>
-            {
-                Type operationType = t.GetInterfaces()[0].GenericTypeArguments[0];
-                KeyValuePair<int, Type> mappedOperation = OperationTypeMapper.First(x => x.Value == operationType);
-
-                DecoderTypeMapper.Add(mappedOperation.Key, t);
-            });
         }
 
         private void PopulateEncoderTypeMapper()

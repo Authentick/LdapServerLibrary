@@ -1,11 +1,11 @@
 using System.Formats.Asn1;
-using Gatekeeper.LdapServerLibrary.Models.Operations.Request;
+using Gatekeeper.LdapServerLibrary.PacketParser.Models.Operations.Request;
 
-namespace Gatekeeper.LdapServerLibrary.Parser.Decoder
+namespace Gatekeeper.LdapServerLibrary.PacketParser.Decoder
 {
     internal class ExtendedRequestDecoder : IApplicationDecoder<ExtendedRequest>
     {
-        public ExtendedRequest TryDecode(AsnReader reader)
+        public ExtendedRequest TryDecode(AsnReader reader, byte[] input)
         {
             Asn1Tag bindRequestApplication = new Asn1Tag(TagClass.Application, 23);
             AsnReader subReader = reader.ReadSequence(bindRequestApplication);

@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Gatekeeper.LdapServerLibrary.Session.Events;
-using static Gatekeeper.LdapServerLibrary.Session.Events.ISearchEvent;
+using static Gatekeeper.LdapServerLibrary.PacketParser.Models.Operations.Request.SearchRequest;
 
 namespace Sample
 {
@@ -48,21 +48,21 @@ namespace Sample
 
         private Expression BuildWithBaseFilter(Expression filterExpr, Expression itemExpr)
         {
-            if (_searchEvent.BaseObject == "")
+            if (_searchEvent.SearchRequest.BaseObject == "")
             {
                 return filterExpr;
             }
-            else if (_searchEvent.BaseObject.StartsWith("dc="))
+            else if (_searchEvent.SearchRequest.BaseObject.StartsWith("dc="))
             {
                 MemberExpression dnExpr = Expression.Property(itemExpr, "Dn");
-                MethodCallExpression valueExprEndsWith = Expression.Call(dnExpr, typeof(string).GetMethod("EndsWith", new Type[] { typeof(string) }), Expression.Constant(_searchEvent.BaseObject));
+                MethodCallExpression valueExprEndsWith = Expression.Call(dnExpr, typeof(string).GetMethod("EndsWith", new Type[] { typeof(string) }), Expression.Constant(_searchEvent.SearchRequest.BaseObject));
 
                 return Expression.And(valueExprEndsWith, filterExpr);
             }
             else
             {
                 MemberExpression left = Expression.Property(itemExpr, "Dn");
-                ConstantExpression right = Expression.Constant(_searchEvent.BaseObject);
+                ConstantExpression right = Expression.Constant(_searchEvent.SearchRequest.BaseObject);
                 BinaryExpression equalExpr = Expression.Equal(left, right);
 
                 return Expression.And(equalExpr, filterExpr);
@@ -150,7 +150,7 @@ namespace Sample
             if (filter.AttributeDesc == "cn")
             {
                 MemberExpression dnProperty = Expression.Property(itemExpression, "Dn");
-                string baseObj = (_searchEvent.BaseObject == "") ? "" : "," + _searchEvent.BaseObject;
+                string baseObj = (_searchEvent.SearchRequest.BaseObject == "") ? "" : "," + _searchEvent.SearchRequest.BaseObject;
 
                 Regex regex = new Regex("^cn=" + suppliedRegex + Regex.Escape(baseObj) + "$", RegexOptions.Compiled);
                 ConstantExpression regexConst = Expression.Constant(regex);
@@ -206,7 +206,7 @@ namespace Sample
             if (filter.AttributeDesc == "cn")
             {
                 Expression left = Expression.Property(itemExpression, "Dn");
-                string baseObj = (_searchEvent.BaseObject == "") ? "" : "," + _searchEvent.BaseObject;
+                string baseObj = (_searchEvent.SearchRequest.BaseObject == "") ? "" : "," + _searchEvent.SearchRequest.BaseObject;
                 Expression right = Expression.Constant("cn=" + filter.AssertionValue + baseObj);
                 return Expression.Equal(left, right);
             }

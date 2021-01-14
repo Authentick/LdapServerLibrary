@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Version>0.0.1-alpha</Version>
+    <Authors>Lukas Reschke</Authors>
+    <Company>Gatekeeper</Company>
+    <Description>
+      This library implements a simple LDAP packet parser.
+      
+      API reference can be found at https://github.com/GetGatekeeper/LdapServerLibrary
+    </Description>
+    <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/GetGatekeeper/LdapServerLibrary</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/GetGatekeeper/LdapServerLibrary.git</RepositoryUrl>
+    <PackageReleaseNotes>Initial release</PackageReleaseNotes>
+    <RepositoryType>git</RepositoryType>
+    <Title>Gatekeeper.LdapServerLibrary.PacketParser</Title>
+  </PropertyGroup>
+
+</Project>

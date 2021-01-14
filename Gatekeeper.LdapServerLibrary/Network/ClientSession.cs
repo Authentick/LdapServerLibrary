@@ -6,7 +6,6 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Gatekeeper.LdapServerLibrary.Engine;
 using Gatekeeper.LdapServerLibrary.Models;
-using Gatekeeper.LdapServerLibrary.Parser;
 using Gatekeeper.LdapServerLibrary.Engine.Handler;
 
 namespace Gatekeeper.LdapServerLibrary.Network
@@ -17,19 +16,77 @@ namespace Gatekeeper.LdapServerLibrary.Network
         private bool _useStartTls;
         private bool _clientIsConnected = true;
 
+        private const int ASN_LENGTH_INDICATOR = 1;
+        private const int ASN_MAX_SINGLE_BYTE_LENGTH = 127;
+        private const int ASN_LENGTH_PREFIX_COUNT = 2;
+
         internal ClientSession(TcpClient client)
         {
             Client = client;
+        }
+
+        private int GetMultiByteLength(byte lengthIndicator)
+        {
+            return (lengthIndicator >> 0) & 127;
+        }
+
+        public async Task<byte[]> ReadFullyAsync(Stream stream)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                List<Byte> PacketLength = new List<Byte>();
+                Byte[] LengthBuffer = new byte[10];
+                int streamPosition = 0;
+                int? packetSize = null;
+                bool isMultiByteSize = false;
+                int? multiByteSize = null;
+
+                while (true)
+                {
+                    byte[] buffer = new byte[1];
+                    int read = await stream.ReadAsync(buffer, 0, buffer.Length);
+
+                    if (streamPosition == ASN_LENGTH_INDICATOR)
+                    {
+                        int number = Convert.ToInt32(buffer[0]);
+                        if (number <= ASN_MAX_SINGLE_BYTE_LENGTH)
+                        {
+                            packetSize = number + ASN_LENGTH_PREFIX_COUNT;
+                        }
+                        else
+                        {
+                            isMultiByteSize = true;
+                            multiByteSize = GetMultiByteLength(buffer[0]);
+                        }
+                    }
+                    else
+                    {
+                        if (isMultiByteSize && (streamPosition - ASN_LENGTH_PREFIX_COUNT) < multiByteSize)
+                        {
+                            PacketLength.Add(buffer[0]);
+                        }
+                        else if (isMultiByteSize && (streamPosition - ASN_LENGTH_PREFIX_COUNT) == multiByteSize)
+                        {
+                            string hexValue = BitConverter.ToString(PacketLength.ToArray()).Replace("-", "");
+                            packetSize = Convert.ToInt32(hexValue, 16) + ASN_LENGTH_PREFIX_COUNT + PacketLength.Count;
+                        }
+                    }
+
+                    ms.Write(buffer, 0, read);
+                    streamPosition++;
+
+                    if (read <= 0 || streamPosition == packetSize)
+                    {
+                        return ms.ToArray();
+                    }
+                }
+            }
         }
 
         internal void StartReceiving()
         {
             Task networkTask = new Task(async () =>
             {
-                // Buffer for reading data
-                Byte[] bytes = new Byte[2048];
-
-                // Get a stream object for reading and writing
                 NetworkStream unencryptedStream = Client.GetStream();
                 SslStream sslStream = new SslStream(unencryptedStream);
 
@@ -52,8 +109,9 @@ namespace Gatekeeper.LdapServerLibrary.Network
                             _initializedTls = true;
                         }
 
-                        rawOrSslStream.Read(bytes, 0, bytes.Length);
-                        await HandleAsync(bytes, rawOrSslStream, engine);
+                        Byte[] data = await ReadFullyAsync(rawOrSslStream);
+
+                        await HandleAsync(data, rawOrSslStream, engine);
                     }
                     catch (Exception e)
                     {
@@ -75,8 +133,8 @@ namespace Gatekeeper.LdapServerLibrary.Network
 
         private async Task HandleAsync(byte[] bytes, Stream stream, DecisionEngine engine)
         {
-            PacketParser parser = new PacketParser();
-            LdapMessage message = parser.TryParsePacket(bytes);
+            PacketParser.Parser parser = new PacketParser.Parser();
+            PacketParser.Models.LdapMessage message = parser.TryParsePacket(bytes);
 
             List<LdapMessage> replies = await engine.GenerateReply(message);
             foreach (LdapMessage outMsg in replies)
@@ -86,7 +144,7 @@ namespace Gatekeeper.LdapServerLibrary.Network
                     _clientIsConnected = false;
                     break;
                 }
-                byte[] msg = parser.TryEncodePacket(outMsg);
+                byte[] msg = (new Parser.PacketParser()).TryEncodePacket(outMsg);
                 stream.Write(msg, 0, msg.Length);
 
                 if (outMsg.ProtocolOp.GetType() == typeof(Gatekeeper.LdapServerLibrary.Models.Operations.Response.ExtendedOperationResponse))
