@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Gatekeeper.LdapServerLibrary.Engine;
 using Gatekeeper.LdapServerLibrary.Models;
 using Gatekeeper.LdapServerLibrary.Engine.Handler;
+using System.Net;
 
 namespace Gatekeeper.LdapServerLibrary.Network
 {
@@ -90,7 +91,14 @@ namespace Gatekeeper.LdapServerLibrary.Network
                 NetworkStream unencryptedStream = Client.GetStream();
                 SslStream sslStream = new SslStream(unencryptedStream);
 
-                DecisionEngine engine = new DecisionEngine(new ClientContext());
+                IPEndPoint? endpoint = (IPEndPoint?)Client.Client.RemoteEndPoint;
+                if (endpoint == null)
+                {
+                    throw new Exception("IP address is null");
+                }
+
+                ClientContext clientContext = new ClientContext(endpoint.Address);
+                DecisionEngine engine = new DecisionEngine(clientContext);
 
                 bool _initializedTls = false;
 
