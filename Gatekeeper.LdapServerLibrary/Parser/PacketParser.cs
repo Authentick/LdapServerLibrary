@@ -1,6 +1,5 @@
 using System;
 using System.Formats.Asn1;
-using System.Numerics;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Gatekeeper.LdapServerLibrary.Models;
@@ -10,25 +9,6 @@ namespace Gatekeeper.LdapServerLibrary.Parser
 {
     internal class PacketParser
     {
-        internal LdapMessage TryParsePacket(byte[] input)
-        {
-            AsnReader reader = new AsnReader(input, AsnEncodingRules.BER);
-            AsnReader sequenceReader = reader.ReadSequence();
-            BigInteger messageId = sequenceReader.ReadInteger();
-
-            TagClass tagClass = sequenceReader.PeekTag().TagClass;
-            int tagValue = sequenceReader.PeekTag().TagValue;
-
-            if (tagClass != TagClass.Application)
-            {
-                throw new ArgumentException("Input type is expected to be " + TagClass.Application + " but was " + tagClass);
-            }
-
-            IProtocolOp message = DecodeApplicationData(tagValue, sequenceReader);
-
-            return new LdapMessage(messageId, message);
-        }
-
         internal Byte[] TryEncodePacket(LdapMessage message)
         {
             OperationMapper mapper = SingletonContainer.GetOperationMapper();
