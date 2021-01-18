@@ -1,3 +1,4 @@
+using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Gatekeeper.LdapServerLibrary.Network;
@@ -7,6 +8,7 @@ namespace Gatekeeper.LdapServerLibrary
     public class LdapServer
     {
         public int Port = 339;
+        public IPAddress IPAddress = IPAddress.Parse("127.0.0.1"); 
 
         public void RegisterEventListener(LdapEvents ldapEvents)
         {
@@ -26,7 +28,11 @@ namespace Gatekeeper.LdapServerLibrary
         public async Task Start()
         {
             ConnectionManager manager = new ConnectionManager();
-            NetworkListener listener = new NetworkListener(manager, Port);
+            NetworkListener listener = new NetworkListener(
+                manager,
+                IPAddress,
+                Port
+            );
             await listener.Start();
         }
     }

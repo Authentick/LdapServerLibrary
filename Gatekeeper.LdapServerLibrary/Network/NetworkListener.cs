@@ -9,10 +9,15 @@ namespace Gatekeeper.LdapServerLibrary.Network
     {
         private readonly ConnectionManager _connectionManager;
         private readonly int _port;
+        private readonly IPAddress _ipAddress;
 
-        internal NetworkListener(ConnectionManager connectionManager, int port)
+        internal NetworkListener(
+            ConnectionManager connectionManager, 
+            IPAddress ipAddress,
+            int port)
         {
             _connectionManager = connectionManager;
+            _ipAddress = ipAddress;
             _port = port;
         }
 
@@ -21,10 +26,7 @@ namespace Gatekeeper.LdapServerLibrary.Network
             TcpListener? server = null;
             try
             {
-                Int32 port = _port;
-                IPAddress localAddr = IPAddress.Parse("127.0.0.1");
-
-                server = new TcpListener(localAddr, port);
+                server = new TcpListener(_ipAddress, _port);
                 server.Start();
 
                 while (true)
